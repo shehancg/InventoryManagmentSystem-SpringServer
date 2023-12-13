@@ -60,7 +60,7 @@ public class UserService implements IUserService {
         User dbUser = findByUserName(user.getUserName());
 
         if(dbUser == null){
-            throw  new UserNotFoundException("User Not Found");
+            throw new UserNotFoundException("User Not Found");
         }
 
         if(!dbUser.getPassword().equals(user.getPassword())){

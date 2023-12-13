@@ -25,6 +25,9 @@ public class User {
     @Column(name = "user_type_id", nullable = true)
     private Long userTypeId;
 
+    @OneToOne(mappedBy = "user")
+    private UserLogs userLogs;
+
     public User(Long userId, String userName, String password, boolean isActive, Long userTypeId) {
         this.userId = userId;
         this.userName = userName;
