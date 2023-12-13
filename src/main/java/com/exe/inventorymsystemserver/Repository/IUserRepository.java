@@ -13,5 +13,7 @@ public interface IUserRepository extends JpaRepository<User ,Long> {
     @Query("UPDATE User u SET u.isActive = false WHERE u.userId = ?1")
     void DeleteUser(Long userId);
 
+    public User findByUserName(String username);
+
     // Add special Queries if needed
 }

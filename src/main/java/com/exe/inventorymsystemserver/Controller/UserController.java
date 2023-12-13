@@ -1,7 +1,12 @@
 package com.exe.inventorymsystemserver.Controller;
 
+import com.exe.inventorymsystemserver.Exception.InvalidPasswordException;
+import com.exe.inventorymsystemserver.Exception.InvalidUserNameException;
+import com.exe.inventorymsystemserver.Exception.UserNotFoundException;
 import com.exe.inventorymsystemserver.Model.User;
+import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.impl.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +16,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
@@ -61,4 +66,17 @@ public class UserController {
         }
     }
 
+    @PostMapping("/login")
+    public Response loginUser(@RequestBody User user){
+        try {
+            return Response.success(userService.Login(user));
+        } catch (InvalidUserNameException invalidUserNameException) {
+            return Response.fail(invalidUserNameException.getMessage());
+        } catch (UserNotFoundException userNotFoundException) {
+            return Response.fail(userNotFoundException.getMessage());
+        } catch (InvalidPasswordException invalidPasswordException) {
+            return Response.fail(invalidPasswordException.getMessage());
+        }
+
+    }
 }

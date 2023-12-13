@@ -7,10 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class InventoryMSystemServerApplication {
-	private static final Logger logger = LoggerFactory.getLogger(InventoryMSystemServerApplication.class);
+
 	public static void main(String[] args) {
-		logger.info("Your log message");
-		System.out.println("HELLO");
 		SpringApplication.run(InventoryMSystemServerApplication.class, args);
 	}
 
