@@ -1,11 +1,13 @@
 package com.exe.inventorymsystemserver.Model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_logs")
+@Data
 public class UserLogs {
 
     @Id
