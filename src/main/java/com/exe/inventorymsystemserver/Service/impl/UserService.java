@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -87,13 +88,31 @@ public class UserService implements IUserService {
         // Generate JWT
         String jwt = jwtUtil.generateJwt(dbUser.getUserId(), dbUser.getUserName());
 
-        // Update USER_LOGS table
-        UserLogs userLogs = new UserLogs();
-        userLogs.setUserLogsId(dbUser.getUserId());
-        userLogs.setLoginDateTime(LocalDateTime.now());
-        userLogs.setActive(true);
-        userLogs.setJwToken(jwt);
-        iUserLogsRepository.save(userLogs);
+        // Check if USER_LOGS entry already exists
+        Optional<UserLogs> existingUserLogs = iUserLogsRepository.findByUser_UserId(dbUser.getUserId());
+
+        if (existingUserLogs.isPresent()) {
+            // Update existing record
+            UserLogs userLogsToUpdate = existingUserLogs.get();
+            userLogsToUpdate.setLoginDateTime(LocalDateTime.now());
+            userLogsToUpdate.setActive(true);
+            userLogsToUpdate.setJwToken(jwt);
+            iUserLogsRepository.save(userLogsToUpdate);
+
+            // Set userLogsId in the User entity
+            user.setUserLogsId(userLogsToUpdate);
+        } else {
+            // Insert new record
+            UserLogs userLogs = new UserLogs();
+            userLogs.setUser(dbUser);
+            userLogs.setLoginDateTime(LocalDateTime.now());
+            userLogs.setActive(true);
+            userLogs.setJwToken(jwt);
+            iUserLogsRepository.save(userLogs);
+
+            // Set userLogsId in the User entity
+            user.setUserLogsId(userLogs);
+        }
 
         return user;
     }

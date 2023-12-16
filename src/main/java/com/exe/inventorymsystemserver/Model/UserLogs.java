@@ -1,5 +1,7 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,6 +19,7 @@ public class UserLogs {
 
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
+    @JsonBackReference  // Break the bidirectional relationship
     private User user;
 
     @Column(name = "login_datetime")

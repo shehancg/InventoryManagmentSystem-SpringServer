@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,7 +27,8 @@ public class User {
     private Long userTypeId;
 
     @OneToOne(mappedBy = "user")
-    private UserLogs userLogs;
+    @JsonManagedReference  // Break the bidirectional relationship
+    private UserLogs userLogsId;
 
     public User(Long userId, String userName, String password, boolean isActive, Long userTypeId) {
         this.userId = userId;
