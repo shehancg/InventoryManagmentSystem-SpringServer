@@ -30,6 +30,5 @@ public class MachineTypeController {
         return new ResponseEntity<>(updatedMachineType, HttpStatus.OK);
     }
 
-    // Other CRUD operations...
 
 }
