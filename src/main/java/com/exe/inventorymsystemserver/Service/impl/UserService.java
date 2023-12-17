@@ -22,7 +22,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
-
     private final IUserRepository userRepository;
 
     private final IUserLogsRepository iUserLogsRepository;
