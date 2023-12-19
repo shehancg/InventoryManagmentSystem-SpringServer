@@ -36,8 +36,20 @@ public class JwtUtil {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
     }
 
-    public String extractUsername(String jwtToken) {
+    /*public String extractUsername(String jwtToken) {
         Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken).getBody();
         return claims.getSubject();
+    }*/
+
+    public String extractUsername(String jwtToken) {
+        // Remove the "Bearer " prefix
+        String tokenWithoutBearer = jwtToken.replace("Bearer ", "");
+
+        // Parse the JWT token without the "Bearer " prefix
+        Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(tokenWithoutBearer).getBody();
+
+        // Extract and return the subject (username)
+        return claims.getSubject();
     }
+
 }

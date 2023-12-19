@@ -32,7 +32,7 @@ public class MachineType {
     private LocalDateTime modifyDate;
 
     @Column(name = "status")
-    private String status;
+    private boolean status;
 
     public MachineType(Long machineTypeId, String machineTypeName, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, String status) {
         this.machineTypeId = machineTypeId;
@@ -41,7 +41,7 @@ public class MachineType {
         this.createdDate = createdDate;
         this.modifyBy = modifyBy;
         this.modifyDate = modifyDate;
-        this.status = status;
+        this.status = Boolean.parseBoolean(status);
     }
 
     public MachineType() {

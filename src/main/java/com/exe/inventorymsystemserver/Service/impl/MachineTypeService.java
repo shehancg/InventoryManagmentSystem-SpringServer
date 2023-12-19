@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -17,20 +18,38 @@ public class MachineTypeService implements IMachineTypeService {
     private final JwtUtil jwtUtil;
 
     @Override
-    public MachineType createOrUpdateMachineType(MachineType machineType, String jwtToken){
+    public MachineType createOrUpdateMachineType(MachineType machineType, String jwtToken) {
+        // Extract the username from the JWT token
         String username = jwtUtil.extractUsername(jwtToken);
 
+        // Check if machineType has a non-null machineTypeId
         if (machineType.getMachineTypeId() == null) {
             // Creating a new MachineType
             machineType.setCreatedBy(username);
             machineType.setCreatedDate(LocalDateTime.now());
-            machineType.setStatus("ACTIVE");
+            machineType.setStatus(true);
         } else {
             // Updating an existing MachineType
-            machineType.setModifyBy(username);
-            machineType.setModifyDate(LocalDateTime.now());
+            // Retrieve the existing MachineType from the database based on the machineTypeId
+            Optional<MachineType> existingMachineTypeOptional = machineTypeRepository.findById(machineType.getMachineTypeId());
+
+            if (existingMachineTypeOptional.isPresent()) {
+                // Update only the necessary fields
+                MachineType existingMachineType = existingMachineTypeOptional.get();
+                existingMachineType.setModifyBy(username);
+                existingMachineType.setModifyDate(LocalDateTime.now());
+                existingMachineType.setMachineTypeName(machineType.getMachineTypeName());
+
+                // Save the updated entity back to the database
+                return machineTypeRepository.save(existingMachineType);
+            } else {
+                // Handle the case where the entity with the given ID is not found
+                // You can throw an exception or handle it based on your requirements
+                return null;
+            }
         }
 
+        // Save the new or updated MachineType to the database
         return machineTypeRepository.save(machineType);
     }
 }
