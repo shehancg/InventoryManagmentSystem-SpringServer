@@ -4,6 +4,5 @@ import com.exe.inventorymsystemserver.Model.MachineType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IMachineTypeRepository extends JpaRepository<MachineType, Long> {
-
-
+    boolean existsByMachineTypeName(String machineTypeName);
 }

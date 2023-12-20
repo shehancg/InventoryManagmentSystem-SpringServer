@@ -1,5 +1,7 @@
 package com.exe.inventorymsystemserver.Service.impl;
 
+import com.exe.inventorymsystemserver.Exception.DuplicateMachineTypeException;
+import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
 import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineTypeService;
@@ -24,6 +26,18 @@ public class MachineTypeService implements IMachineTypeService {
 
         // Check if machineType has a non-null machineTypeId
         if (machineType.getMachineTypeId() == null) {
+
+            // Creating a new MachineType
+            if (machineType.getMachineTypeName() == null){
+                // Throw exception if machineTypeName is null
+                throw new InvalidMachineTypeException("Machine Type Name Cannot Be Null");
+            }
+
+            // Check for Duplicate Machine Type Name
+            if (machineTypeRepository.existsByMachineTypeName(machineType.getMachineTypeName())){
+                throw new DuplicateMachineTypeException("Machine Type With Same Name Already Exists");
+            }
+
             // Creating a new MachineType
             machineType.setCreatedBy(username);
             machineType.setCreatedDate(LocalDateTime.now());
@@ -34,6 +48,18 @@ public class MachineTypeService implements IMachineTypeService {
             Optional<MachineType> existingMachineTypeOptional = machineTypeRepository.findById(machineType.getMachineTypeId());
 
             if (existingMachineTypeOptional.isPresent()) {
+
+                // Updating a Existing MachineType
+                if (machineType.getMachineTypeName() == null){
+                    // Throw exception if machineTypeName is null
+                    throw new InvalidMachineTypeException("Machine Type Name Cannot Be Null");
+                }
+
+                // Check for Duplicate Machine Type Name
+                if (machineTypeRepository.existsByMachineTypeName(machineType.getMachineTypeName())){
+                    throw new DuplicateMachineTypeException("Machine Type With Same Name Already Exists");
+                }
+
                 // Update only the necessary fields
                 MachineType existingMachineType = existingMachineTypeOptional.get();
                 existingMachineType.setModifyBy(username);

@@ -14,13 +14,13 @@ public class User {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "user_name", unique = false, nullable = false)
+    @Column(name = "user_name", unique = true, nullable = false)
     private String userName;
 
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "is_active", nullable = true)
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
 
     @Column(name = "user_type_id", nullable = true)
