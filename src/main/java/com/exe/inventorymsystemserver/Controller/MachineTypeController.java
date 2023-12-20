@@ -10,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/machine-types")
+@RequestMapping("/api/machinetypes")
 public class MachineTypeController {
 
     private final MachineTypeService machineTypeService;
@@ -19,6 +21,18 @@ public class MachineTypeController {
     @Autowired
     public MachineTypeController(MachineTypeService machineTypeService) {
         this.machineTypeService = machineTypeService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MachineType>> getAllMachineTypes() {
+        List<MachineType> machineTypes = machineTypeService.getAllMachineTypes();
+        return ResponseEntity.ok(machineTypes);
+    }
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllMachineTypeNames() {
+        List<String> machineTypeNames = machineTypeService.getAllMachineTypeNames();
+        return ResponseEntity.ok(machineTypeNames);
     }
 
 /*  @PostMapping
@@ -33,7 +47,7 @@ public class MachineTypeController {
         return new ResponseEntity<>(updatedMachineType, HttpStatus.OK);
     }*/
 
-    @PostMapping
+    @PostMapping("/create")
     public Response createMachineType(@RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {
         try {
             return Response.success(machineTypeService.createOrUpdateMachineType(machineType, jwtToken));

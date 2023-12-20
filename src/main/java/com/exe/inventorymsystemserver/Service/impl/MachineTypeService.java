@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -77,5 +79,16 @@ public class MachineTypeService implements IMachineTypeService {
 
         // Save the new or updated MachineType to the database
         return machineTypeRepository.save(machineType);
+    }
+
+    public List<MachineType> getAllMachineTypes() {
+        return machineTypeRepository.findAll();
+    }
+
+    public List<String> getAllMachineTypeNames(){
+        List<MachineType> machineTypes = machineTypeRepository.findAll();
+        return machineTypes.stream()
+                .map(MachineType::getMachineTypeName)
+                .collect(Collectors.toList());
     }
 }
