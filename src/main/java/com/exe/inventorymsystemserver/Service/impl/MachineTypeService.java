@@ -91,4 +91,16 @@ public class MachineTypeService implements IMachineTypeService {
                 .map(MachineType::getMachineTypeName)
                 .collect(Collectors.toList());
     }
+
+    public void deleteMachineType(Long machineTypeId) {
+        // Check if the machine type exists
+        if (machineTypeRepository.existsById(machineTypeId)) {
+            // If it exists, delete the machine type
+            machineTypeRepository.deleteById(machineTypeId);
+        } else {
+            // Handle the case where the machine type with the given ID is not found
+            // You can throw an exception or handle it based on your requirements
+            throw new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId);
+        }
+    }
 }

@@ -35,6 +35,16 @@ public class MachineTypeController {
         return ResponseEntity.ok(machineTypeNames);
     }
 
+    @DeleteMapping("/{machineTypeId}")
+    public ResponseEntity<String> deleteMachineType(@PathVariable Long machineTypeId) {
+        try {
+            machineTypeService.deleteMachineType(machineTypeId);
+            return new ResponseEntity<>("Machine Type deleted successfully", HttpStatus.OK);
+        } catch (InvalidMachineTypeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
 /*  @PostMapping
     public ResponseEntity<MachineType> createMachineType(@RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {
         MachineType createdMachineType = machineTypeService.createOrUpdateMachineType(machineType, jwtToken);
