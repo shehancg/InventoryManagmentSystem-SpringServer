@@ -1,10 +1,12 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "machine_type")
@@ -33,6 +35,10 @@ public class MachineType {
 
     @Column(name = "status")
     private boolean status;
+
+    @OneToMany(mappedBy = "machineType")
+    @JsonBackReference
+    private List<MachineModel> machineModels;
 
     public MachineType(Long machineTypeId, String machineTypeName, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, String status) {
         this.machineTypeId = machineTypeId;
