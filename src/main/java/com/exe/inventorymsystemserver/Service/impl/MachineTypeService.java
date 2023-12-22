@@ -2,11 +2,13 @@ package com.exe.inventorymsystemserver.Service.impl;
 
 import com.exe.inventorymsystemserver.Exception.DuplicateMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
+import com.exe.inventorymsystemserver.Exception.ModelAttachToMachineTypeException;
 import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineTypeService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -93,14 +95,19 @@ public class MachineTypeService implements IMachineTypeService {
     }
 
     public void deleteMachineType(Long machineTypeId) {
-        // Check if the machine type exists
-        if (machineTypeRepository.existsById(machineTypeId)) {
-            // If it exists, delete the machine type
-            machineTypeRepository.deleteById(machineTypeId);
-        } else {
-            // Handle the case where the machine type with the given ID is not found
-            // You can throw an exception or handle it based on your requirements
-            throw new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId);
+        try {
+            // Check if the machine type exists
+            if (machineTypeRepository.existsById(machineTypeId)) {
+                // If it exists, delete the machine type
+                machineTypeRepository.deleteById(machineTypeId);
+            } else {
+                // Handle the case where the machine type with the given ID is not found
+                // You can throw an exception or handle it based on your requirements
+                throw new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId);
+            }
+        } catch (DataIntegrityViolationException ex) {
+            // Catch DataIntegrityViolationException and throw a more specific exception
+            throw new ModelAttachToMachineTypeException("Cannot delete machine type with ID: " + machineTypeId + " due to existing references in Machine Model tables.");
         }
     }
 }

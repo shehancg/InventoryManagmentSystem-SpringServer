@@ -2,6 +2,7 @@ package com.exe.inventorymsystemserver.Controller;
 
 import com.exe.inventorymsystemserver.Exception.DuplicateMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
+import com.exe.inventorymsystemserver.Exception.ModelAttachToMachineTypeException;
 import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.impl.MachineTypeService;
@@ -36,14 +37,18 @@ public class MachineTypeController {
     }
 
     @DeleteMapping("/{machineTypeId}")
-    public ResponseEntity<String> deleteMachineType(@PathVariable Long machineTypeId) {
+    public Response deleteMachineType(@PathVariable Long machineTypeId) {
         try {
             machineTypeService.deleteMachineType(machineTypeId);
-            return new ResponseEntity<>("Machine Type deleted successfully", HttpStatus.OK);
-        } catch (InvalidMachineTypeException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+            return Response.success(machineTypeService);
+        } catch (InvalidMachineTypeException invalidMachineTypeException) {
+            return Response.fail(invalidMachineTypeException.getMessage());
+        } catch (ModelAttachToMachineTypeException modelAttachToMachineTypeException) {
+            // Catch more generic exceptions and handle them appropriately
+            return Response.fail(modelAttachToMachineTypeException.getMessage());
         }
     }
+
 
 /*  @PostMapping
     public ResponseEntity<MachineType> createMachineType(@RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {
