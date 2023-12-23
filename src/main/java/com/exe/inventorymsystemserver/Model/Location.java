@@ -21,10 +21,10 @@ public class Location {
     @Column(name = "location_type", nullable = false)
     private String locationType;
 
-    @Column(name = "created_by", nullable = false)
+    @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "created_date", nullable = false)
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
     @Column(name = "modify_by")
@@ -33,8 +33,8 @@ public class Location {
     @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 
-    @Column(name = "status", nullable = false)
-    private boolean status = true;
+    @Column(name = "status")
+    private boolean status;
 
     public Location(Long locationId, String locationName, String locationType, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status) {
         this.locationId = locationId;
@@ -47,5 +47,6 @@ public class Location {
         this.status = status;
     }
 
-
+    public Location() {
+    }
 }
