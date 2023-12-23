@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class MachineModel {
     private String pdfLocation;
 
     @ManyToOne
-    @JsonManagedReference
+    @JsonBackReference
     @JoinColumn(name = "machine_type_id")
     private MachineType machineType;
 

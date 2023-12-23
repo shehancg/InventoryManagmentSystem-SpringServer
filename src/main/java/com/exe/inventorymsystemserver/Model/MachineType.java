@@ -37,7 +37,7 @@ public class MachineType {
     private boolean status;
 
     @OneToMany(mappedBy = "machineType")
-    @JsonBackReference
+    @JsonManagedReference
     private List<MachineModel> machineModels;
 
     public MachineType(Long machineTypeId, String machineTypeName, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, String status) {
