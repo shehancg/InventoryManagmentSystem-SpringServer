@@ -5,6 +5,7 @@ import com.exe.inventorymsystemserver.Exception.InvalidUserNameException;
 import com.exe.inventorymsystemserver.Exception.UserNotFoundException;
 import com.exe.inventorymsystemserver.Model.User;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
+import com.exe.inventorymsystemserver.Service.IUserService;
 import com.exe.inventorymsystemserver.Service.impl.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){

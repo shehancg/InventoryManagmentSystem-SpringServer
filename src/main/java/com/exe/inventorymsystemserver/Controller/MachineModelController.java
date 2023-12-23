@@ -2,22 +2,23 @@ package com.exe.inventorymsystemserver.Controller;
 
 import com.exe.inventorymsystemserver.Exception.DuplicateMachineModelException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineModelException;
+import com.exe.inventorymsystemserver.Exception.ItemAttachToModelTypeException;
 import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
-import com.exe.inventorymsystemserver.Service.impl.MachineModelService;
+import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/machinemodels")
 public class MachineModelController {
 
     @Autowired
-    private MachineModelService machineModelService;
+    private IMachineModelService machineModelService;
 
     /*@PostMapping("/create")
     public ResponseEntity<MachineModel> createMachineModel(
@@ -63,5 +64,28 @@ public class MachineModelController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<List<MachineModel>> getAllMachineTypes() {
+        List<MachineModel> machineModels = machineModelService.getAllMachineModels();
+        return ResponseEntity.ok(machineModels);
+    }
 
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllMachineModelNames() {
+        List<String> machineModelNames = machineModelService.getAllMachineModelNames();
+        return ResponseEntity.ok(machineModelNames);
+    }
+
+    @DeleteMapping("/{modelId}")
+    public Response deleteMachineModel(@PathVariable Long modelId) {
+        try {
+            machineModelService.deleteMachineModel(modelId);
+            return Response.success(machineModelService);
+        } catch (InvalidMachineModelException invalidMachineTypeException) {
+            return Response.fail(invalidMachineTypeException.getMessage());
+        } catch (ItemAttachToModelTypeException modelAttachToMachineTypeException) {
+            // Catch more generic exceptions and handle them appropriately
+            return Response.fail(modelAttachToMachineTypeException.getMessage());
+        }
+    }
 }

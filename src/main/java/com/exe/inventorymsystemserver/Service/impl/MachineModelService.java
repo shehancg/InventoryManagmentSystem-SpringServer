@@ -3,6 +3,7 @@ package com.exe.inventorymsystemserver.Service.impl;
 import com.exe.inventorymsystemserver.Exception.DuplicateMachineModelException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineModelException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
+import com.exe.inventorymsystemserver.Exception.ItemAttachToModelTypeException;
 import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.Repository.IMachineModelRepository;
@@ -11,11 +12,13 @@ import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MachineModelService implements IMachineModelService {
@@ -98,7 +101,6 @@ public class MachineModelService implements IMachineModelService {
                 // You can throw an exception or handle it based on your requirements
                 throw new InvalidMachineModelException("Machine Model with ID " + machineModel.getModelId() + " not found.");
             }
-
         }
 
         // Save the new or updated MachineModel to the database
@@ -130,6 +132,36 @@ public class MachineModelService implements IMachineModelService {
                 e.printStackTrace();
                 // You might want to log the exception or return an error response to the user
             }
+        }
+    }
+
+    // Method to get ALL Machine Models
+    public List<MachineModel> getAllMachineModels() {
+        return machineModelRepository.findAll();
+    }
+
+    // Method to get ALL Machine Models Names
+    public List<String> getAllMachineModelNames(){
+        List<MachineModel> machineModels = machineModelRepository.findAll();
+        return machineModels.stream()
+                .map(MachineModel::getMachineModelNumber)
+                .collect(Collectors.toList());
+    }
+
+    public void deleteMachineModel(Long modelId) {
+        try {
+            // Check if the machine type exists
+            if (machineModelRepository.existsById(modelId)) {
+                // If it exists, delete the machine type
+                machineModelRepository.deleteById(modelId);
+            } else {
+                // Handle the case where the machine type with the given ID is not found
+                // You can throw an exception or handle it based on your requirements
+                throw new InvalidMachineModelException("Machine Type not found with ID: " + modelId);
+            }
+        } catch (DataIntegrityViolationException ex) {
+            // Catch DataIntegrityViolationException and throw a more specific exception
+            throw new ItemAttachToModelTypeException("Cannot delete machine type with ID: " + modelId + " due to existing references in Machine Model tables.");
         }
     }
 }

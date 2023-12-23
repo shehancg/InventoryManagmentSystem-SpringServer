@@ -1,6 +1,5 @@
 package com.exe.inventorymsystemserver.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -36,7 +35,7 @@ public class MachineType {
     @Column(name = "status")
     private boolean status;
 
-    @OneToMany(mappedBy = "machineType")
+    @OneToMany(mappedBy = "machineType", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<MachineModel> machineModels;
 
