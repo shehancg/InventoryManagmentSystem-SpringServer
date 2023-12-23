@@ -75,7 +75,7 @@ public class MachineTypeService implements IMachineTypeService {
             } else {
                 // Handle the case where the entity with the given ID is not found
                 // You can throw an exception or handle it based on your requirements
-                return null;
+                throw new InvalidMachineTypeException("Machine Type with ID " + machineType.getMachineTypeId() + " not found.");
             }
         }
 
@@ -94,20 +94,20 @@ public class MachineTypeService implements IMachineTypeService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteMachineType(Long machineTypeId) {
+    public MachineType deleteMachineType(Long machineTypeId) {
+        // Check if the machine type exists
+        MachineType machineType = machineTypeRepository.findById(machineTypeId)
+                .orElseThrow(() -> new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId));
+
         try {
-            // Check if the machine type exists
-            if (machineTypeRepository.existsById(machineTypeId)) {
-                // If it exists, delete the machine type
-                machineTypeRepository.deleteById(machineTypeId);
-            } else {
-                // Handle the case where the machine type with the given ID is not found
-                // You can throw an exception or handle it based on your requirements
-                throw new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId);
-            }
+            // If it exists, delete the machine type
+            machineTypeRepository.deleteById(machineTypeId);
         } catch (DataIntegrityViolationException ex) {
             // Catch DataIntegrityViolationException and throw a more specific exception
-            throw new ModelAttachToMachineTypeException("Cannot delete machine type with ID: " + machineTypeId + " due to existing references in Machine Model tables.");
+            throw new ModelAttachToMachineTypeException("Cannot delete machine type with ID: " + machineTypeId +
+                    " due to existing references in Machine Model tables.");
         }
+        return machineType;
     }
+
 }

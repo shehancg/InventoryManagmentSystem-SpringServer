@@ -3,6 +3,7 @@ package com.exe.inventorymsystemserver.Controller;
 import com.exe.inventorymsystemserver.Exception.DuplicateMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.ModelAttachToMachineTypeException;
+import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.IMachineTypeService;
@@ -39,8 +40,8 @@ public class MachineTypeController {
     @DeleteMapping("/{machineTypeId}")
     public Response deleteMachineType(@PathVariable Long machineTypeId) {
         try {
-            machineTypeService.deleteMachineType(machineTypeId);
-            return Response.success(machineTypeService);
+            MachineType machineType = machineTypeService.deleteMachineType(machineTypeId);
+            return Response.success(machineType);
         } catch (InvalidMachineTypeException invalidMachineTypeException) {
             return Response.fail(invalidMachineTypeException.getMessage());
         } catch (ModelAttachToMachineTypeException modelAttachToMachineTypeException) {

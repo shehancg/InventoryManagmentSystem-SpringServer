@@ -79,8 +79,8 @@ public class MachineModelController {
     @DeleteMapping("/{modelId}")
     public Response deleteMachineModel(@PathVariable Long modelId) {
         try {
-            machineModelService.deleteMachineModel(modelId);
-            return Response.success(machineModelService);
+            MachineModel machineModel = machineModelService.deleteMachineModel(modelId);
+            return Response.success(machineModel);
         } catch (InvalidMachineModelException invalidMachineTypeException) {
             return Response.fail(invalidMachineTypeException.getMessage());
         } catch (ItemAttachToModelTypeException modelAttachToMachineTypeException) {

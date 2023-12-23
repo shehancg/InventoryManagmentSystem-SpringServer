@@ -148,20 +148,20 @@ public class MachineModelService implements IMachineModelService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteMachineModel(Long modelId) {
+    public MachineModel deleteMachineModel(Long modelId) {
+        // Check if the machine model exists
+        MachineModel machineModel = machineModelRepository.findById(modelId)
+                .orElseThrow(() -> new InvalidMachineModelException("Machine Model not found with ID: " + modelId));
+
         try {
-            // Check if the machine type exists
-            if (machineModelRepository.existsById(modelId)) {
-                // If it exists, delete the machine type
-                machineModelRepository.deleteById(modelId);
-            } else {
-                // Handle the case where the machine type with the given ID is not found
-                // You can throw an exception or handle it based on your requirements
-                throw new InvalidMachineModelException("Machine Type not found with ID: " + modelId);
-            }
+            // If it exists, delete the machine model
+            machineModelRepository.deleteById(modelId);
         } catch (DataIntegrityViolationException ex) {
             // Catch DataIntegrityViolationException and throw a more specific exception
-            throw new ItemAttachToModelTypeException("Cannot delete machine type with ID: " + modelId + " due to existing references in Machine Model tables.");
+            throw new ItemAttachToModelTypeException("Cannot delete machine model with ID: " + modelId +
+                    " due to existing references in other tables.");
         }
+        return machineModel;
     }
+
 }

@@ -11,5 +11,5 @@ public interface IMachineModelService {
 
     List<String> getAllMachineModelNames();
 
-    void deleteMachineModel(Long modelId);
+    MachineModel deleteMachineModel(Long modelId);
 }
