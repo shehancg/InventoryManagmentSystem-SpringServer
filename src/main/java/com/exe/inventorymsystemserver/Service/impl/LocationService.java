@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Service.impl;
 
+import com.exe.inventorymsystemserver.Dto.LocationDTO;
 import com.exe.inventorymsystemserver.Exception.DuplicateLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationTypeException;
@@ -11,7 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService implements ILocationService {
@@ -83,5 +88,38 @@ public class LocationService implements ILocationService {
             }
         }
         return locationRepository.save(location);
+    }
+
+    // Method to get All Locations
+    public List<Location> getAllLocations(){
+        return locationRepository.findAll();
+    }
+
+    // Methods to get All Location Names
+    public List<String> getAllLocationNames(){
+        List<Location> location = locationRepository.findAll();
+        return location.stream()
+                .map(Location::getLocationName)
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, List<LocationDTO>> getLocationListsByTypes(){
+        List<Location> l1Locations = locationRepository.findByLocationType("L1");
+        List<Location> l2Locations = locationRepository.findByLocationType("L2");
+        List<Location> l3Locations = locationRepository.findByLocationType("L3");
+
+        Map<String, List<LocationDTO>> locationLists = new HashMap<>();
+
+        locationLists.put("L1", convertToLocationDTOList(l1Locations));
+        locationLists.put("L2", convertToLocationDTOList(l2Locations));
+        locationLists.put("L3", convertToLocationDTOList(l3Locations));
+
+        return locationLists;
+    }
+
+    private List<LocationDTO> convertToLocationDTOList(List<Location> locations) {
+        return locations.stream()
+                .map(location -> new LocationDTO(location.getLocationId(), location.getLocationName()))
+                .collect(Collectors.toList());
     }
 }
