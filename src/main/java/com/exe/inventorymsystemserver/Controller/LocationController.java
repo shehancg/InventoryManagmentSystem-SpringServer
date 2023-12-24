@@ -16,7 +16,7 @@ public class LocationController {
     private ILocationService locationService;
 
     @PostMapping("/create")
-    public Response createMachineModel(
+    public Response createLocation(
             @RequestBody Location location,
             @RequestHeader("Authorization") String jwtToken) {
         try {
@@ -26,6 +26,17 @@ public class LocationController {
             return Response.fail(duplicateException.getMessage());
         } catch (InvalidLocationException invalidException) {
             return Response.fail(invalidException.getMessage());
+        }
+    }
+
+    @PutMapping("/{locationId}")
+    public Response updateLocation(@PathVariable Long locationId, @RequestBody Location location, @RequestHeader("Authorization") String jwtToken) {
+        try {
+            return Response.success(locationService.createOrUpdateLocationModel(location, jwtToken));
+        } catch (DuplicateLocationException duplicateLocationException) {
+            return Response.fail(duplicateLocationException.getMessage());
+        } catch (InvalidLocationException invalidLocationException) {
+            return Response.fail(invalidLocationException.getMessage());
         }
     }
 }

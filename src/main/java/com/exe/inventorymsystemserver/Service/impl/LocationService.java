@@ -71,6 +71,7 @@ public class LocationService implements ILocationService {
                 Location updateLocation = existingLocation.get();
                 updateLocation.setModifyBy(username);
                 updateLocation.setModifyDate(LocalDateTime.now());
+                updateLocation.setLocationName(location.getLocationName());
 
 
                 // Save the Updated Location Back to the Database
