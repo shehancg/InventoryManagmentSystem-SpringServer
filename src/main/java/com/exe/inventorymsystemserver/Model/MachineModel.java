@@ -2,12 +2,12 @@ package com.exe.inventorymsystemserver.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "machine_model")
@@ -48,6 +48,9 @@ public class MachineModel {
 
     @Column(name = "status")
     private boolean status;
+
+    @ManyToMany(mappedBy = "machineModels")
+    private List<Parts> parts;
 
     public MachineModel(Long modelId, String machineModelNumber, String pdfLocation, MachineType machineType, MultipartFile pdfFile, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, Boolean status) {
         this.modelId = modelId;

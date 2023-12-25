@@ -8,6 +8,7 @@ import com.exe.inventorymsystemserver.Model.MachineType;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.IMachineTypeService;
 import com.exe.inventorymsystemserver.Service.impl.MachineTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/machinetypes")
+@RequiredArgsConstructor
 public class MachineTypeController {
 
     private final IMachineTypeService machineTypeService;

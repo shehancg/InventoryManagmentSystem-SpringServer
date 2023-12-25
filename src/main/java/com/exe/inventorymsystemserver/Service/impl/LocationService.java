@@ -8,6 +8,7 @@ import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.Repository.ILocationRepository;
 import com.exe.inventorymsystemserver.Service.ILocationService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LocationService implements ILocationService {
 
     @Autowired

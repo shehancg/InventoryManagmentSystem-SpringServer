@@ -6,6 +6,7 @@ import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.ILocationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,11 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/locations")
+@RequiredArgsConstructor
 public class LocationController {
 
-    @Autowired
-    private ILocationService locationService;
+
+    private final ILocationService locationService;
 
     @PostMapping("/create")
     public Response createLocation(

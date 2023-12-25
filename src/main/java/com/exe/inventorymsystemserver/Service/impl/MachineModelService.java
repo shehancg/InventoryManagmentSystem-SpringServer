@@ -11,25 +11,32 @@ import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import io.jsonwebtoken.io.IOException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class MachineModelService implements IMachineModelService {
-    @Autowired
-    private IMachineModelRepository machineModelRepository;
 
-    @Autowired
-    private IMachineTypeRepository machineTypeRepository;
+    private final IMachineModelRepository machineModelRepository;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final IMachineTypeRepository machineTypeRepository;
+
+    private final JwtUtil jwtUtil;
+
+    /*private final Path fileStoragePath;
+
+    public MachineModelService(Path fileStoragePath) {
+        this.fileStoragePath = fileStoragePath;
+    }*/
 
     public MachineModel createOrUpdateMachineModel(MachineModel machineModel, String jwtToken){
 
