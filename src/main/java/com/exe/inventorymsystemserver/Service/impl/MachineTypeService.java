@@ -83,10 +83,12 @@ public class MachineTypeService implements IMachineTypeService {
         return machineTypeRepository.save(machineType);
     }
 
+    // Service to get all machines
     public List<MachineType> getAllMachineTypes() {
         return machineTypeRepository.findAll();
     }
 
+    // Service to get all machines by names
     public List<String> getAllMachineTypeNames(){
         List<MachineType> machineTypes = machineTypeRepository.findAll();
         return machineTypes.stream()
@@ -94,6 +96,7 @@ public class MachineTypeService implements IMachineTypeService {
                 .collect(Collectors.toList());
     }
 
+    // Delete machine by ID
     public MachineType deleteMachineType(Long machineTypeId) {
         // Check if the machine type exists
         MachineType machineType = machineTypeRepository.findById(machineTypeId)
@@ -108,6 +111,19 @@ public class MachineTypeService implements IMachineTypeService {
                     " due to existing references in Machine Model tables.");
         }
         return machineType;
+    }
+
+    // Get machine type info by ID
+    public MachineType getMachineTypeById(Long machineTypeId) {
+        Optional<MachineType> machineTypeOptional = machineTypeRepository.findById(machineTypeId);
+
+        if (machineTypeOptional.isPresent()) {
+            return machineTypeOptional.get();
+        } else {
+            // Handle the case where the machine type with the given ID is not found
+            // You can throw an exception or handle it based on your requirements
+            throw new InvalidMachineTypeException("Machine Type with ID " + machineTypeId + " not found.");
+        }
     }
 
 }

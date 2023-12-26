@@ -39,6 +39,17 @@ public class MachineTypeController {
         return ResponseEntity.ok(machineTypeNames);
     }
 
+    // Get machine type by ID
+    @GetMapping("/{machineTypeId}")
+    public Response getMachineTypeById(@PathVariable Long machineTypeId) {
+        try {
+            MachineType machineType = machineTypeService.getMachineTypeById(machineTypeId);
+            return Response.success(machineType);
+        } catch (InvalidMachineTypeException invalidMachineTypeException) {
+            return Response.fail(invalidMachineTypeException.getMessage());
+        }
+    }
+
     @DeleteMapping("/{machineTypeId}")
     public Response deleteMachineType(@PathVariable Long machineTypeId) {
         try {
@@ -51,19 +62,6 @@ public class MachineTypeController {
             return Response.fail(modelAttachToMachineTypeException.getMessage());
         }
     }
-
-
-/*  @PostMapping
-    public ResponseEntity<MachineType> createMachineType(@RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {
-        MachineType createdMachineType = machineTypeService.createOrUpdateMachineType(machineType, jwtToken);
-        return new ResponseEntity<>(createdMachineType, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{machineTypeId}")
-    public ResponseEntity<MachineType> updateMachineType(@PathVariable Long machineTypeId, @RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {
-        MachineType updatedMachineType = machineTypeService.createOrUpdateMachineType(machineType, jwtToken);
-        return new ResponseEntity<>(updatedMachineType, HttpStatus.OK);
-    }*/
 
     @PostMapping("/create")
     public Response createMachineType(@RequestBody MachineType machineType, @RequestHeader("Authorization") String jwtToken) {

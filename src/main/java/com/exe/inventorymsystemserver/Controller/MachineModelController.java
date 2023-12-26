@@ -7,7 +7,6 @@ import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,16 +19,6 @@ import java.util.List;
 public class MachineModelController {
 
     private final IMachineModelService machineModelService;
-
-    /*@PostMapping("/create")
-    public ResponseEntity<MachineModel> createMachineModel(
-            @RequestParam("pdfFile") MultipartFile pdfFile,
-            @ModelAttribute MachineModel machineModel,
-            @RequestHeader("Authorization") String jwtToken) {
-        machineModel.setPdfFile(pdfFile);
-        MachineModel createdMachineModel = machineModelService.createOrUpdateMachineModel(machineModel, jwtToken);
-        return new ResponseEntity<>(createdMachineModel, HttpStatus.CREATED);
-    }*/
 
     @PostMapping("/create")
     public Response createMachineModel(
@@ -65,12 +54,14 @@ public class MachineModelController {
         }
     }
 
+    // Get all Machine Models
     @GetMapping
     public ResponseEntity<List<MachineModel>> getAllMachineTypes() {
         List<MachineModel> machineModels = machineModelService.getAllMachineModels();
         return ResponseEntity.ok(machineModels);
     }
 
+    // Get Names of all machine models
     @GetMapping("/names")
     public ResponseEntity<List<String>> getAllMachineModelNames() {
         List<String> machineModelNames = machineModelService.getAllMachineModelNames();

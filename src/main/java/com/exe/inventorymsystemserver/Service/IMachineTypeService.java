@@ -12,4 +12,6 @@ public interface IMachineTypeService {
     List<String> getAllMachineTypeNames();
 
     MachineType deleteMachineType(Long machineTypeId);
+
+    MachineType getMachineTypeById(Long machineTypeId);
 }
