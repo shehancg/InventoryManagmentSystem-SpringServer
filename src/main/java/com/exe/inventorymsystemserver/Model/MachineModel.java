@@ -25,7 +25,7 @@ public class MachineModel {
     @Column(name = "pdf_location")
     private String pdfLocation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "machine_type_id")
     private MachineType machineType;

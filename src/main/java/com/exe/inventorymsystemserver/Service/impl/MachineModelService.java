@@ -12,11 +12,9 @@ import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import io.jsonwebtoken.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -155,6 +153,7 @@ public class MachineModelService implements IMachineModelService {
                 .collect(Collectors.toList());
     }
 
+    // Delete Method
     public MachineModel deleteMachineModel(Long modelId) {
         // Check if the machine model exists
         MachineModel machineModel = machineModelRepository.findById(modelId)
@@ -170,5 +169,18 @@ public class MachineModelService implements IMachineModelService {
         }
         return machineModel;
     }
+
+    // Get Machine Model By ID
+    @Override
+    public MachineModel getMachineModelById(Long modelId){
+        Optional<MachineModel> machineModelOptional = machineModelRepository.findById(modelId);
+
+        if (machineModelOptional.isPresent()){
+            return machineModelOptional.get();
+        }else {
+            throw new InvalidMachineModelException("Machine Model with ID " + modelId + " not found.");
+        }
+    }
+
 
 }

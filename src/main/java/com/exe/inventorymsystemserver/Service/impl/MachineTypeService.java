@@ -113,7 +113,8 @@ public class MachineTypeService implements IMachineTypeService {
         return machineType;
     }
 
-    // Get machine type info by ID
+    // Get Machine Type info by ID
+    @Override
     public MachineType getMachineTypeById(Long machineTypeId) {
         Optional<MachineType> machineTypeOptional = machineTypeRepository.findById(machineTypeId);
 

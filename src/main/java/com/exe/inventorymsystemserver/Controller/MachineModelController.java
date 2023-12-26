@@ -80,4 +80,15 @@ public class MachineModelController {
             return Response.fail(modelAttachToMachineTypeException.getMessage());
         }
     }
+
+    // Get Machine Model by ID
+    @GetMapping("/{modelId}")
+    public Response getMachineModelById(@PathVariable Long modelId) {
+        try {
+            MachineModel machineModel = machineModelService.getMachineModelById(modelId);
+            return Response.success(machineModel);
+        } catch (InvalidMachineModelException invalidMachineModelException) {
+            return Response.fail(invalidMachineModelException.getMessage());
+        }
+    }
 }
