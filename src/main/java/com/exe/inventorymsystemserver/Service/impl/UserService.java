@@ -5,11 +5,14 @@ import com.exe.inventorymsystemserver.Exception.InvalidUserNameException;
 import com.exe.inventorymsystemserver.Exception.UserNotFoundException;
 import com.exe.inventorymsystemserver.Model.User;
 import com.exe.inventorymsystemserver.Model.UserLogs;
+import com.exe.inventorymsystemserver.Repository.IMachineModelRepository;
+import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Repository.IUserLogsRepository;
 import com.exe.inventorymsystemserver.Repository.IUserRepository;
 import com.exe.inventorymsystemserver.Service.IUserService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements IUserService {
 
     private final IUserRepository userRepository;
@@ -26,6 +28,14 @@ public class UserService implements IUserService {
     private final IUserLogsRepository iUserLogsRepository;
 
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    public UserService(IUserRepository userRepository, IUserLogsRepository userLogsRepository, JwtUtil jwtUtil){
+
+        this.userRepository = userRepository;
+        this.iUserLogsRepository = userLogsRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public List<User> getAllUsers() {

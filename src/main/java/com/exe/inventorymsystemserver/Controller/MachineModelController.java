@@ -6,7 +6,9 @@ import com.exe.inventorymsystemserver.Exception.ItemAttachToModelTypeException;
 import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.IMachineModelService;
+import com.exe.inventorymsystemserver.Service.impl.MachineModelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,11 @@ import java.util.List;
 public class MachineModelController {
 
     private final IMachineModelService machineModelService;
+
+    @Autowired
+    public MachineModelController(MachineModelService machineModelService){
+        this.machineModelService = machineModelService;
+    }
 
     @PostMapping("/create")
     public Response createMachineModel(

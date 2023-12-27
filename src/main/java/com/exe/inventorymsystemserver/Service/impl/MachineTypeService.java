@@ -4,10 +4,12 @@ import com.exe.inventorymsystemserver.Exception.DuplicateMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.InvalidMachineTypeException;
 import com.exe.inventorymsystemserver.Exception.ModelAttachToMachineTypeException;
 import com.exe.inventorymsystemserver.Model.MachineType;
+import com.exe.inventorymsystemserver.Repository.ILocationRepository;
 import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineTypeService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +19,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class MachineTypeService implements IMachineTypeService {
 
     private final IMachineTypeRepository machineTypeRepository;
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    public MachineTypeService(IMachineTypeRepository machineTypeRepository, JwtUtil jwtUtil){
+
+        this.machineTypeRepository = machineTypeRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public MachineType createOrUpdateMachineType(MachineType machineType, String jwtToken) {

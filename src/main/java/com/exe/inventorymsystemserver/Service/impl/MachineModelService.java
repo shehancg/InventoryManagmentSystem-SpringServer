@@ -11,7 +11,7 @@ import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import io.jsonwebtoken.io.IOException;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class MachineModelService implements IMachineModelService {
 
     private final IMachineModelRepository machineModelRepository;
@@ -29,6 +28,14 @@ public class MachineModelService implements IMachineModelService {
     private final IMachineTypeRepository machineTypeRepository;
 
     private final JwtUtil jwtUtil;
+
+    @Autowired
+    public MachineModelService(IMachineModelRepository machineModelRepository,IMachineTypeRepository machineTypeRepository, JwtUtil jwtUtil){
+
+        this.machineModelRepository = machineModelRepository;
+        this.machineTypeRepository = machineTypeRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     /*private final Path fileStoragePath;
 

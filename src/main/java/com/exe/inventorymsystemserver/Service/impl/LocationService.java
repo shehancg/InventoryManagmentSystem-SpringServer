@@ -8,7 +8,6 @@ import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.Repository.ILocationRepository;
 import com.exe.inventorymsystemserver.Service.ILocationService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +19,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class LocationService implements ILocationService {
 
-    @Autowired
-    private ILocationRepository locationRepository;
+    private final ILocationRepository locationRepository;
+
+    private final JwtUtil jwtUtil;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    public LocationService(ILocationRepository locationRepository, JwtUtil jwtUtil){
+
+        this.locationRepository = locationRepository;
+        this.jwtUtil = jwtUtil;
+    }
 
     public Location createOrUpdateLocationModel(Location location, String jwtToken)  {
 
@@ -105,6 +108,7 @@ public class LocationService implements ILocationService {
                 .collect(Collectors.toList());
     }
 
+    // Method to Get Locations by Location Type
     public Map<String, List<LocationDTO>> getLocationListsByTypes(){
         List<Location> l1Locations = locationRepository.findByLocationType("L1");
         List<Location> l2Locations = locationRepository.findByLocationType("L2");
