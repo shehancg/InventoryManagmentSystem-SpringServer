@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -75,6 +76,7 @@ public class Parts {
     private String colorCode;
 
     @ManyToMany
+    @JsonBackReference
     @JoinTable(
             name = "machine_model_part",
             joinColumns = @JoinColumn(name = "part_id"),
