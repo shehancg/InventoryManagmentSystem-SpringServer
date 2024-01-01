@@ -76,7 +76,7 @@ public class UserController {
         } catch (UserNotFoundException userNotFoundException) {
             return Response.fail(userNotFoundException.getMessage());
         } catch (InvalidPasswordException invalidPasswordException) {
-            return Response.fail(invalidPasswordException.getMessage());
+            return Response.invalidLogin(invalidPasswordException.getMessage());
         }
 
     }

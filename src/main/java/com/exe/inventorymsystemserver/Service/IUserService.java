@@ -6,6 +6,7 @@ import com.exe.inventorymsystemserver.Exception.UserNotFoundException;
 import com.exe.inventorymsystemserver.Model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
 
@@ -14,6 +15,6 @@ public interface IUserService {
     User saveUser(User user);
     void deleteUser(Long userId);
 
-    User Login(User user)
+    Map<String, Object> Login(User user)
         throws InvalidUserNameException, UserNotFoundException, InvalidPasswordException;
 }

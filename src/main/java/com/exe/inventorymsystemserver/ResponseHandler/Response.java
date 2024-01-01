@@ -31,7 +31,7 @@ public class Response {
     }
 
     private enum Status {
-        SUCCESS, FAIL, SYSTEM_DOWN
+        SUCCESS, FAIL, SYSTEM_DOWN, INVALID_LOGIN
     }
 
     private Response(Status status, boolean action, Object data) {
@@ -52,7 +52,11 @@ public class Response {
         return new Response(Status.FAIL, false, data);
     }
 
-    public static Response systemDowmn(Object data) {
+    public static Response systemDown(Object data) {
         return new Response(Status.SYSTEM_DOWN, false, data);
+    }
+
+    public static Response invalidLogin(Object data) {
+        return new Response(Status.INVALID_LOGIN, false, data);
     }
 }
