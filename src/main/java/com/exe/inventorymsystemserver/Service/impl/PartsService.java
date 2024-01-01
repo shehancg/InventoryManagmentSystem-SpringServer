@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -127,26 +126,5 @@ public class PartsService implements IPartsService {
             }
         }
     }
-
-    /*public void handleImageFile1(Parts part) throws IOException {
-        if (part.getImageFile11() != null) {
-            String fileName = part.getPartNumber() + "_image1.jpg";
-            Path filePath = fileStorageService.storeFile(part.getImageFile11(), fileName);
-
-            // Set the file path to the entity
-            part.setImage1Loc(filePath.toString());
-        }
-    }
-
-    public void handleImageFile2(Parts part) throws IOException {
-        if (part.getImageFile2() != null) {
-            String fileName = part.getPartNumber() + "_image2.jpg";
-            Path filePath = fileStorageService.storeFile(part.getImageFile2(), fileName);
-
-            // Set the file path to the entity
-            part.setImage2Loc(filePath.toString());
-        }
-    }*/
-
 
 }

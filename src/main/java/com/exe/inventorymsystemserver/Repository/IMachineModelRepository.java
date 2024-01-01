@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 public interface IMachineModelRepository extends JpaRepository<MachineModel, Long> {
 
     boolean existsByMachineModelNumber(String machineModelNumber);
+
+    boolean existsByMachineModelNumberAndModelIdNot(String machineModelNumber, Long modelId);
 }

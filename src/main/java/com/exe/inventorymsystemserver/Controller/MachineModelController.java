@@ -34,7 +34,7 @@ public class MachineModelController {
             @RequestHeader("Authorization") String jwtToken) {
         try {
             machineModel.setPdfFile(pdfFile);
-            MachineModel createdMachineModel = machineModelService.createOrUpdateMachineModel(machineModel, jwtToken);
+            MachineModel createdMachineModel = machineModelService.createOrUpdateMachineModel(machineModel, pdfFile, jwtToken);
             return Response.success(createdMachineModel);
         } catch (DuplicateMachineModelException duplicateException) {
             return Response.fail(duplicateException.getMessage());
@@ -52,7 +52,7 @@ public class MachineModelController {
         try {
             machineModel.setPdfFile(pdfFile);
             // Pass the modelId to the service method
-            MachineModel updatedMachineModel = machineModelService.createOrUpdateMachineModel(machineModel, jwtToken);
+            MachineModel updatedMachineModel = machineModelService.createOrUpdateMachineModel(machineModel, pdfFile, jwtToken);
             return Response.success(updatedMachineModel);
         } catch (DuplicateMachineModelException duplicateException) {
             return Response.fail(duplicateException.getMessage());

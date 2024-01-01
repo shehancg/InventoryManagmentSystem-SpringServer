@@ -10,11 +10,15 @@ import com.exe.inventorymsystemserver.Repository.IMachineModelRepository;
 import com.exe.inventorymsystemserver.Repository.IMachineTypeRepository;
 import com.exe.inventorymsystemserver.Service.IMachineModelService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
-import io.jsonwebtoken.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -24,26 +28,27 @@ import java.util.stream.Collectors;
 public class MachineModelService implements IMachineModelService {
 
     private final IMachineModelRepository machineModelRepository;
-
     private final IMachineTypeRepository machineTypeRepository;
-
     private final JwtUtil jwtUtil;
+    private final Path fileStoragePath;
+    private final FileStorageService fileStorageService;
 
     @Autowired
-    public MachineModelService(IMachineModelRepository machineModelRepository,IMachineTypeRepository machineTypeRepository, JwtUtil jwtUtil){
+    public MachineModelService(@Value("${spring.servlet.multipart.location:temp}")String fileStorageLocation,
+                               FileStorageService fileStorageService,
+                               IMachineModelRepository machineModelRepository,
+                               IMachineTypeRepository machineTypeRepository,
+                               JwtUtil jwtUtil) throws java.io.IOException {
 
         this.machineModelRepository = machineModelRepository;
         this.machineTypeRepository = machineTypeRepository;
         this.jwtUtil = jwtUtil;
+        this.fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
+        this.fileStorageService =  fileStorageService;
+        Files.createDirectories(fileStoragePath);
     }
 
-    /*private final Path fileStoragePath;
-
-    public MachineModelService(Path fileStoragePath) {
-        this.fileStoragePath = fileStoragePath;
-    }*/
-
-    public MachineModel createOrUpdateMachineModel(MachineModel machineModel, String jwtToken){
+    public MachineModel createOrUpdateMachineModel(MachineModel machineModel, MultipartFile pdfFile, String jwtToken){
 
         // Extract the username from the JWT token
         String username = jwtUtil.extractUsername(jwtToken);
@@ -70,8 +75,13 @@ public class MachineModelService implements IMachineModelService {
             machineModel.setMachineType(machineType);
             machineModel.setStatus(true);
 
-            // Handle file upload
-            handleFileUpload(machineModel);
+            // Handle Pdf upload
+            if (pdfFile != null && !pdfFile.isEmpty()){
+                // Save or Process the pdf file and update the pdf location in machinemodel entity
+                String pdflocation = fileStorageService.storeFile(pdfFile);
+                machineModel.setPdfLocation(pdflocation);
+            }
+
         } else {
 
             // Updating an existing MachineModel
@@ -86,7 +96,7 @@ public class MachineModelService implements IMachineModelService {
                 }
 
                 // Check for Duplicate Machine Model Number
-                if (machineModelRepository.existsByMachineModelNumber(machineModel.getMachineModelNumber())) {
+                if (machineModelRepository.existsByMachineModelNumberAndModelIdNot(machineModel.getMachineModelNumber(), machineModel.getModelId())) {
                     throw new DuplicateMachineModelException("Machine Model With Same Number Already Exists");
                 }
 
@@ -98,16 +108,18 @@ public class MachineModelService implements IMachineModelService {
                 existingMachineModel.setModifyBy(username);
                 existingMachineModel.setModifyDate(LocalDateTime.now());
                 existingMachineModel.setMachineModelNumber(machineModel.getMachineModelNumber());
-                existingMachineModel.setPdfLocation(machineModel.getPdfLocation());
                 existingMachineModel.setMachineType(machineType);
 
+                // Handle Pdf upload
+                if (pdfFile != null && !pdfFile.isEmpty()){
+                    // Save or Process the pdf file and update the pdf location in machinemodel entity
+                    String pdflocation = fileStorageService.storeFile(pdfFile);
+                    existingMachineModel.setPdfLocation(pdflocation);
+                }
+
                 // Save the updated entity back to the database
-                MachineModel updatedMachineModel = machineModelRepository.save(existingMachineModel);
 
-                // Handle file upload
-                handleFileUpload(updatedMachineModel);
-
-                return updatedMachineModel;
+                return machineModelRepository.save(existingMachineModel);
             } else {
                 // Handle the case where the entity with the given ID is not found
                 // You can throw an exception or handle it based on your requirements
@@ -123,28 +135,6 @@ public class MachineModelService implements IMachineModelService {
     private MachineType getMachineTypeById(Long machineTypeId) {
         return machineTypeRepository.findById(machineTypeId)
                 .orElseThrow(() -> new InvalidMachineTypeException("Machine Type with ID " + machineTypeId + " not found."));
-    }
-
-    private void handleFileUpload(MachineModel machineModel) {
-        if (machineModel.getPdfFile() != null) {
-            try {
-                // File path with File.separator for cross-platform compatibility
-                //String filePath = "D:" + File.separator + "pdf" + File.separator + machineModel.getMachineModelNumber() + ".pdf";
-
-                String filePath = "src/main/resources/pdf/" + machineModel.getMachineModelNumber() + ".pdf";
-
-                //D:\pdf
-                // Save the file to the specified path
-                // ...
-
-                // For simplicity, just set the file path to the model
-                machineModel.setPdfLocation(filePath);
-            } catch (IOException e) {
-                // Handle IOException (or specific file-related exceptions) here
-                e.printStackTrace();
-                // You might want to log the exception or return an error response to the user
-            }
-        }
     }
 
     // Method to get ALL Machine Models
