@@ -44,7 +44,7 @@ public class PartsService implements IPartsService {
     }
 
     public Parts createOrUpdatePart(Parts parts, String jwtToken, List<Long>machineModelIds,
-                                    MultipartFile imageFile11, MultipartFile imageFile2) {
+                                    MultipartFile imageFile1, MultipartFile imageFile2) {
 
         // Extract the username from the JWT token
         String username = jwtUtil.extractUsername(jwtToken);
@@ -78,9 +78,9 @@ public class PartsService implements IPartsService {
             parts.setStatus(true);
 
             // Handle image uploads
-            if (imageFile11 != null && !imageFile11.isEmpty()) {
+            if (imageFile1 != null && !imageFile1.isEmpty()) {
                 // Save or process the image and update the image location in the Parts entity
-                String image1Loc = fileStorageService.storeFile(imageFile11);
+                String image1Loc = fileStorageService.storeFile(imageFile1);
                 parts.setImage1Loc(image1Loc);
             }
 
@@ -107,9 +107,9 @@ public class PartsService implements IPartsService {
                 // Update other fields as needed
 
                 // Handle image uploads for updates
-                if (imageFile11 != null && !imageFile11.isEmpty()) {
+                if (imageFile1 != null && !imageFile1.isEmpty()) {
                     // Save or process the image and update the image location in the Parts entity
-                    String image1Loc = fileStorageService.storeFile(imageFile11);
+                    String image1Loc = fileStorageService.storeFile(imageFile1);
                     updatePart.setImage1Loc(image1Loc);
                 }
 

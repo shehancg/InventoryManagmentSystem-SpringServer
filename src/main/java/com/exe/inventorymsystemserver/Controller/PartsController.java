@@ -1,6 +1,9 @@
 package com.exe.inventorymsystemserver.Controller;
 
+import com.exe.inventorymsystemserver.Exception.DuplicatePartNumberException;
+import com.exe.inventorymsystemserver.Exception.InvalidPartException;
 import com.exe.inventorymsystemserver.Model.Parts;
+import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.IPartsService;
 import com.exe.inventorymsystemserver.Service.impl.PartsService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +27,7 @@ public class PartsController {
         this.partsService = partsService;
     }
 
-    @PostMapping("/createOrUpdate")
+    /*@PostMapping("/createOrUpdate")
     public ResponseEntity<?> createOrUpdatePart(@ModelAttribute Parts parts,
                                                 @RequestParam("jwtToken") String jwtToken,
                                                 @RequestParam("machineModelIds") List<Long> machineModelIds,
@@ -36,7 +39,25 @@ public class PartsController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 
+    @PostMapping("/create")
+    public Response createPart(
+            @RequestParam("imageFile1") MultipartFile imageFile1,
+            @RequestParam("imageFile2") MultipartFile imageFile2,
+            @RequestParam("machineModelIds") List<Long> machineModelIds,
+            @ModelAttribute Parts parts,
+            @RequestHeader("Authorization") String jwtToken) {
+        try {
+            parts.setImageFile1(imageFile1);
+            parts.setImageFile2(imageFile2);
+            Parts createdPart = partsService.createOrUpdatePart(parts, jwtToken, machineModelIds, imageFile1, imageFile2);
+            return Response.success(createdPart);
+        } catch (InvalidPartException invalidPartException) {
+            return Response.fail(invalidPartException.getMessage());
+        } catch (DuplicatePartNumberException duplicatePartNumberException) {
+            return Response.fail(duplicatePartNumberException.getMessage());
+        }
+    }
 
 }

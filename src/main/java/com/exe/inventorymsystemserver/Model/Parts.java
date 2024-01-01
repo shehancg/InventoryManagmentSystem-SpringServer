@@ -63,7 +63,7 @@ public class Parts {
 
     @Transient
     @JsonIgnore
-    private MultipartFile imageFile11; // Transient field to handle file upload
+    private MultipartFile imageFile1; // Transient field to handle file upload
 
     @Column(name = "image2_loc")
     private String image2Loc;
