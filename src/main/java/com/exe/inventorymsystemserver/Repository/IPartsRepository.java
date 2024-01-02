@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IPartsRepository extends JpaRepository<Parts, Long> {
@@ -21,4 +22,6 @@ public interface IPartsRepository extends JpaRepository<Parts, Long> {
     boolean existsByPartNumberAndPartIdNot(String partNumber, Long partId);
 
     List<Parts> findByStatus(boolean status);
+
+    Optional<Parts> findByPartIdAndStatus(Long partId, boolean status);
 }

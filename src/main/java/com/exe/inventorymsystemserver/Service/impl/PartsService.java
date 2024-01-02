@@ -159,4 +159,10 @@ public class PartsService implements IPartsService {
         partsRepository.deletePart(partId);
     }
 
+    // Get Item By Id
+    @Override
+    public Optional<Parts> getPartById(Long partId){
+        return partsRepository.findByPartIdAndStatus(partId, true);
+    }
+
 }

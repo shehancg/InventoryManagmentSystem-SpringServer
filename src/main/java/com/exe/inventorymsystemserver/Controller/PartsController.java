@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parts")
@@ -107,11 +108,20 @@ public class PartsController {
         }
     }
 
+    // Get All Parts
     @GetMapping
     public ResponseEntity<List<Parts>> getAllParts() {
         List<Parts> allParts = partsService.getAllPartModels();
         return new ResponseEntity<>(allParts, HttpStatus.OK);
     }
 
+    // Get Part By Id
+    @GetMapping("/{partId}")
+    public ResponseEntity<Parts> getPartById(@PathVariable Long partId) {
+        Optional<Parts> partOptional = partsService.getPartById(partId);
+
+        return partOptional.map(part -> new ResponseEntity<>(part, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
 
 }
