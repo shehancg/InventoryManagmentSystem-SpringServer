@@ -44,7 +44,7 @@ public class UserController {
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/delete/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody User user) {
         User existingUser = userService.getUserById(userId);
         if (existingUser != null) {
@@ -56,7 +56,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         User existingUser = userService.getUserById(userId);
         if (existingUser != null) {
@@ -78,6 +78,5 @@ public class UserController {
         } catch (InvalidPasswordException invalidPasswordException) {
             return Response.invalidLogin(invalidPasswordException.getMessage());
         }
-
     }
 }

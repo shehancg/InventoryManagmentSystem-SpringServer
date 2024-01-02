@@ -79,5 +79,39 @@ public class PartsController {
         }
     }
 
+    /*@PutMapping("delete/{partId}")
+    public ResponseEntity<String> updatePart(
+            @PathVariable Long partId) {
+        try {
+            partsService.deleteItem(partId);
+            return new ResponseEntity<>("Part updated successfully", HttpStatus.OK);
+        } catch (InvalidPartException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An error occurred while updating the part", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }*/
+
+    @PutMapping("delete/{partId}")
+    public Response updatePart(
+            @PathVariable Long partId) {
+        try {
+            partsService.deleteItem(partId);
+            return Response.success(partId);
+        } catch (InvalidPartException e) {
+            return Response.fail(e.getMessage());
+            //return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return Response.fail(e.getMessage());
+            //return new ResponseEntity<>("An error occurred while updating the part", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Parts>> getAllParts() {
+        List<Parts> allParts = partsService.getAllPartModels();
+        return new ResponseEntity<>(allParts, HttpStatus.OK);
+    }
+
 
 }

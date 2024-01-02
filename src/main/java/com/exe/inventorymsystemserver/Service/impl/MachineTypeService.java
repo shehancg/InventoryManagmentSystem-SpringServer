@@ -107,7 +107,6 @@ public class MachineTypeService implements IMachineTypeService {
         // Check if the machine type exists
         MachineType machineType = machineTypeRepository.findById(machineTypeId)
                 .orElseThrow(() -> new InvalidMachineTypeException("Machine Type not found with ID: " + machineTypeId));
-
         try {
             // If it exists, delete the machine type
             machineTypeRepository.deleteById(machineTypeId);

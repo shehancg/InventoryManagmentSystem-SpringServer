@@ -11,6 +11,7 @@ import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -144,6 +145,18 @@ public class PartsService implements IPartsService {
                 throw new InvalidPartException("Part ID " + parts.getPartId() + " not found.");
             }
         }
+    }
+
+    // Method to Get All Parts
+    public List<Parts> getAllPartModels(){
+        return partsRepository.findByStatus(true);
+    }
+
+    // Delete Part
+    @Override
+    @Transactional
+    public void deleteItem(Long partId){
+        partsRepository.deletePart(partId);
     }
 
 }
