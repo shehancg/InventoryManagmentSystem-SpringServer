@@ -97,6 +97,23 @@ public class PartsService implements IPartsService {
             Optional<Parts> existingPart = partsRepository.findById(parts.getPartId());
 
             if (existingPart.isPresent()) {
+
+                if (parts.getPartNumber() == null){
+                    throw new InvalidPartException("Part Number Cannot Be Null");
+                }
+
+                if (parts.getQuantity() == 0){
+                    throw new InvalidPartException("Part Quantity Cannot Be Null");
+                }
+
+                if (parts.getPrice() == 0){
+                    throw new InvalidPartException("Part Price Cannot Be Null");
+                }
+
+                if (partsRepository.existsByPartNumberAndPartIdNot(parts.getPartNumber(),parts.getPartId())){
+                    throw new DuplicatePartNumberException("Part Number with Same Number Already Exists");
+                }
+
                 // Update only the necessary fields
                 Parts updatePart = existingPart.get();
                 updatePart.setPartName(parts.getPartName());
@@ -104,6 +121,8 @@ public class PartsService implements IPartsService {
                 updatePart.setQuantity(parts.getQuantity());
                 updatePart.setPrice(parts.getPrice());
                 updatePart.setColorCode(parts.getColorCode());
+                updatePart.setModifyBy(username);
+                updatePart.setModifyDate(LocalDateTime.now());
                 // Update other fields as needed
 
                 // Handle image uploads for updates

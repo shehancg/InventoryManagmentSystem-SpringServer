@@ -60,4 +60,24 @@ public class PartsController {
         }
     }
 
+    @PutMapping("/{partId}")
+    public Response updatePart(
+            @RequestParam("imageFile1") MultipartFile imageFile1,
+            @RequestParam("imageFile2") MultipartFile imageFile2,
+            @RequestParam("machineModelIds") List<Long> machineModelIds,
+            @ModelAttribute Parts parts,
+            @RequestHeader("Authorization") String jwtToken) {
+        try {
+            parts.setImageFile1(imageFile1);
+            parts.setImageFile2(imageFile2);
+            Parts createdPart = partsService.createOrUpdatePart(parts, jwtToken, machineModelIds, imageFile1, imageFile2);
+            return Response.success(createdPart);
+        } catch (InvalidPartException invalidPartException) {
+            return Response.fail(invalidPartException.getMessage());
+        } catch (DuplicatePartNumberException duplicatePartNumberException) {
+            return Response.fail(duplicatePartNumberException.getMessage());
+        }
+    }
+
+
 }
