@@ -149,7 +149,21 @@ public class PartsService implements IPartsService {
 
     // Method to Get All Parts
     public List<Parts> getAllPartModels(){
-        return partsRepository.findByStatus(true);
+        List<Parts> partsList = partsRepository.findByStatus(true);
+
+        // Update image URLs in each part
+        for (Parts part : partsList) {
+            part.setImage1Loc(getImageUrl(part.getImage1Loc()));
+            part.setImage2Loc(getImageUrl(part.getImage2Loc()));
+        }
+        //return partsRepository.findByStatus(true);
+        return partsList;
+    }
+
+    // Helper method to get the full image URL
+    private String getImageUrl(String imageFileName) {
+        // Assuming you have a method in FileStorageService to generate the full URL
+        return fileStorageService.getFileUrl(imageFileName);
     }
 
     // Delete Part

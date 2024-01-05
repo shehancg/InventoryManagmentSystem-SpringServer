@@ -2,6 +2,7 @@ package com.exe.inventorymsystemserver.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -75,7 +76,8 @@ public class Parts {
     @Column(name = "color_code")
     private String colorCode;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JsonBackReference
     @JoinTable(
             name = "machine_model_part",
@@ -85,4 +87,35 @@ public class Parts {
     )
     private List<MachineModel> machineModels;
 
+    @OneToMany(mappedBy = "part",fetch = FetchType.EAGER)
+    @JsonIgnore
+    @JsonManagedReference
+    private List<Transaction> transactions;
+
+    public Parts(Long partId, String partNumber, String partName, String description, int quantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions) {
+        this.partId = partId;
+        this.partNumber = partNumber;
+        this.partName = partName;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
+        this.location1 = location1;
+        this.location2 = location2;
+        this.location3 = location3;
+        this.createdBy = createdBy;
+        this.createdDate = createdDate;
+        this.modifyBy = modifyBy;
+        this.modifyDate = modifyDate;
+        this.status = status;
+        this.image1Loc = image1Loc;
+        this.imageFile1 = imageFile1;
+        this.image2Loc = image2Loc;
+        this.imageFile2 = imageFile2;
+        this.colorCode = colorCode;
+        this.machineModels = machineModels;
+        this.transactions = transactions;
+    }
+
+    public Parts() {
+    }
 }

@@ -74,6 +74,14 @@ public class FileStorageService implements IFileStorageService {
         return UUID.randomUUID().toString() + extension;
     }
 
+    // New method to get the full URL for a file
+    public String getFileUrl(String fileName) {
+        // Modify this method based on your file storage and URL generation strategy
+        // Assuming you have a base URL for your image server
+        String baseUrl = "http://localhost:8080/";
+        return baseUrl +  "fileStorage/" + fileName;
+    }
+
     // Method to store a file
     /*public Path storeFile(MultipartFile file, String fileName) throws IOException {
         Path targetLocation = this.fileStorageLocation.resolve(fileName);
