@@ -1,6 +1,7 @@
 package com.exe.inventorymsystemserver.Controller;
 
 import com.exe.inventorymsystemserver.Exception.InsufficientStockException;
+import com.exe.inventorymsystemserver.Exception.InvalidPartException;
 import com.exe.inventorymsystemserver.Exception.InvalidTransactionException;
 import com.exe.inventorymsystemserver.Model.Transaction;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
@@ -33,6 +34,8 @@ public class TransactionController {
             return Response.fail((insufficientStockException.getMessage()));
         }catch (InvalidTransactionException invalidTransactionException){
             return Response.fail((invalidTransactionException.getMessage()));
+        } catch (InvalidPartException invalidPartException){
+            return Response.fail((invalidPartException.getMessage()));
         }
     }
 }

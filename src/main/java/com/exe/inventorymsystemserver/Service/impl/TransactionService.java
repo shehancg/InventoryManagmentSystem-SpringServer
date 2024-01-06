@@ -1,8 +1,6 @@
 package com.exe.inventorymsystemserver.Service.impl;
 
-import com.exe.inventorymsystemserver.Exception.InsufficientStockException;
-import com.exe.inventorymsystemserver.Exception.InvalidTransactionException;
-import com.exe.inventorymsystemserver.Exception.TransactionCreationException;
+import com.exe.inventorymsystemserver.Exception.*;
 import com.exe.inventorymsystemserver.Model.Parts;
 import com.exe.inventorymsystemserver.Model.Transaction;
 import com.exe.inventorymsystemserver.Repository.IPartsRepository;
@@ -33,26 +31,25 @@ public class TransactionService implements ITransactionService {
 
     @Transactional
     public Transaction createTransaction(Transaction transaction, String jwtToken) {
-            // Extract the username from the JWT token
-            String username = jwtUtil.extractUsername(jwtToken);
+        // Extract the username from the JWT token
+        String username = jwtUtil.extractUsername(jwtToken);
 
-            // Validate input parameters
-            /*if (transaction == null) {
-                throw new IllegalArgumentException("Transaction cannot be null");
-            }*/
+        // Fetch the Parts entity using partId
+        Parts part = getPartById(transaction.getPartId());
 
-            // Update the quantity in the Parts table based on the transaction type
-            updatePartsQuantity(transaction);
+        // Update the quantity in the Parts table based on the transaction type
+        updatePartsQuantity(transaction, part);
 
-            // Save the transaction
-            transaction.setCreatedBy(username);
-            transaction.setCreatedDate(LocalDateTime.now());
+        // Save the
+        transaction.setName(part.getPartNumber());
+        transaction.setPart(part);
+        transaction.setCreatedBy(username);
+        transaction.setCreatedDate(LocalDateTime.now());
 
-            return transactionRepository.save(transaction);
+        return transactionRepository.save(transaction);
     }
 
-    private void updatePartsQuantity(Transaction transaction) {
-        Parts part = transaction.getPart();
+    private void updatePartsQuantity(Transaction transaction, Parts part) {
 
         // Validate transaction type and quantity
         if (transaction.getTransactionType() == null) {
@@ -78,23 +75,26 @@ public class TransactionService implements ITransactionService {
         part.setQuantity(updatedQuantity);
 
         // Calculate Price and Total
-        calculatePriceAndTotal(transaction);
+        calculatePriceAndTotal(transaction,part);
 
         // Save the updated part
         partsRepository.save(part);
     }
 
-    private void calculatePriceAndTotal(Transaction transaction) {
-
-        Parts part = transaction.getPart();
+    private void calculatePriceAndTotal(Transaction transaction, Parts parts) {
 
         // Calculate Price and Total
-        double price = part.getPrice();
+        double price = parts.getPrice();
         int quantity = transaction.getQuantity();
         double total = price * quantity;
 
         // Set the calculated values for transaction
         transaction.setPrice(price);
         transaction.setTotal(total);
+    }
+
+    private Parts getPartById(Long partId) {
+        return partsRepository.findById(partId)
+                .orElseThrow(() -> new InvalidPartException("Part with ID " + partId + " not found."));
     }
 }

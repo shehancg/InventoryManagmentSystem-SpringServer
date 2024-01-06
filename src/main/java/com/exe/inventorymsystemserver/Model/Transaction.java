@@ -26,6 +26,10 @@ public class Transaction {
     @JoinColumn(name = "part_id")
     private Parts part;
 
+    // Change to accept only partId
+    @Transient
+    private Long partId;
+
     @Column(name = "name")
     private String name;
 
