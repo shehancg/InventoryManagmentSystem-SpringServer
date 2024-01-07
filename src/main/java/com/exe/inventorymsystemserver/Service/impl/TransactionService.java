@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class TransactionService implements ITransactionService {
@@ -96,5 +97,10 @@ public class TransactionService implements ITransactionService {
     private Parts getPartById(Long partId) {
         return partsRepository.findById(partId)
                 .orElseThrow(() -> new InvalidPartException("Part with ID " + partId + " not found."));
+    }
+
+    // Method to Get ALL Transactions
+    public List<Transaction> getAllTransactions(){
+        return transactionRepository.findAll();
     }
 }

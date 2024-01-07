@@ -9,7 +9,10 @@ import com.exe.inventorymsystemserver.Service.ITransactionService;
 import com.exe.inventorymsystemserver.Service.impl.TransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/transaction")
@@ -37,5 +40,12 @@ public class TransactionController {
         } catch (InvalidPartException invalidPartException){
             return Response.fail((invalidPartException.getMessage()));
         }
+    }
+
+    // Get all Transactions
+    @GetMapping
+    public ResponseEntity<List<Transaction>> getAllTransactions() {
+        List<Transaction> transactions = transactionService.getAllTransactions();
+        return ResponseEntity.ok(transactions);
     }
 }
