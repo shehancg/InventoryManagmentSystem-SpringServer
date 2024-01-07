@@ -124,4 +124,9 @@ public class PartsController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/belowLimitQuantity")
+    public List<Parts> getPartsWithQuantityBelowLimit() {
+        return partsService.getAllPartsBelowLimitQuantity();
+    }
+
 }

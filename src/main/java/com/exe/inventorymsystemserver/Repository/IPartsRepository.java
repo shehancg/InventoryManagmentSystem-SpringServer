@@ -23,5 +23,7 @@ public interface IPartsRepository extends JpaRepository<Parts, Long> {
 
     List<Parts> findByStatus(boolean status);
 
+    List<Parts> findByQuantityLessThanAndLimitQuantityIsNotNull(int limitQuantity);
+
     Optional<Parts> findByPartIdAndStatus(Long partId, boolean status);
 }

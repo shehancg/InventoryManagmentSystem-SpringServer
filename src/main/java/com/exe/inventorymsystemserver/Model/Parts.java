@@ -33,6 +33,9 @@ public class Parts {
     @Column(name = "quantity")
     private int quantity;
 
+    @Column(name = "limit_quantity")
+    private int limitQuantity;
+
     @Column(name = "price")
     private double price;
 
@@ -96,12 +99,13 @@ public class Parts {
     @JsonManagedReference
     private List<Transaction> transactions;
 
-    public Parts(Long partId, String partNumber, String partName, String description, int quantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions, List<PartMachineModelDTO> machineModelsDTO) {
+    public Parts(Long partId, String partNumber, String partName, String description, int quantity, int limitQuantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions, List<PartMachineModelDTO> machineModelsDTO) {
         this.partId = partId;
         this.partNumber = partNumber;
         this.partName = partName;
         this.description = description;
         this.quantity = quantity;
+        this.limitQuantity = limitQuantity;
         this.price = price;
         this.location1 = location1;
         this.location2 = location2;

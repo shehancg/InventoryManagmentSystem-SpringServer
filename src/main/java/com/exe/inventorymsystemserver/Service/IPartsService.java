@@ -16,4 +16,6 @@ public interface IPartsService {
     List<Parts> getAllPartModels();
 
     Optional<Parts> getPartById(Long partId);
+
+    List<Parts> getAllPartsBelowLimitQuantity();
 }

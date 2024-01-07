@@ -212,4 +212,20 @@ public class PartsService implements IPartsService {
         return partsRepository.findByPartIdAndStatus(partId, true);
     }
 
+    // Get LOW quantity Parts
+    /*public List<Parts> getAllPartsBelowLimitQuantity(){
+        return partsRepository.findByQuantityLessThanAndLimitQuantityIsNotNull(Integer.MAX_VALUE);
+    }*/
+
+    public List<Parts> getAllPartsBelowLimitQuantity() {
+        List<Parts> allParts = partsRepository.findByStatus(true);
+        return filterPartsByQuantityBelowLimit(allParts);
+    }
+
+    private List<Parts> filterPartsByQuantityBelowLimit(List<Parts> parts) {
+        return parts.stream()
+                .filter(part -> part.getQuantity() < part.getLimitQuantity())
+                .collect(Collectors.toList());
+    }
+
 }
