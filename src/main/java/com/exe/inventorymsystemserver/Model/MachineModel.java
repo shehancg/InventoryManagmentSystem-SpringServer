@@ -50,7 +50,7 @@ public class MachineModel {
     @Column(name = "status")
     private boolean status;
 
-    @ManyToMany(mappedBy = "machineModels")
+    @ManyToMany(mappedBy = "machineModels", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Parts> parts;
 

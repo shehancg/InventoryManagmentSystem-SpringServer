@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Service.impl;
 
+import com.exe.inventorymsystemserver.Dto.PartMachineModelDTO;
 import com.exe.inventorymsystemserver.Exception.DuplicatePartNumberException;
 import com.exe.inventorymsystemserver.Exception.InvalidPartException;
 import com.exe.inventorymsystemserver.Model.MachineModel;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PartsService implements IPartsService {
@@ -148,7 +150,7 @@ public class PartsService implements IPartsService {
     }
 
     // Method to Get All Parts
-    public List<Parts> getAllPartModels(){
+    /*public List<Parts> getAllPartModels(){
         List<Parts> partsList = partsRepository.findByStatus(true);
 
         // Update image URLs in each part
@@ -158,6 +160,37 @@ public class PartsService implements IPartsService {
         }
         //return partsRepository.findByStatus(true);
         return partsList;
+    }*/
+
+    // Method to Get All Parts along with their models
+    public List<Parts> getAllPartModels() {
+        List<Parts> partsList = partsRepository.findByStatus(true);
+
+        // Update image URLs and include associated MachineModelDTOs in each part
+        for (Parts part : partsList) {
+            // Update image URLs
+            part.setImage1Loc(getImageUrl(part.getImage1Loc()));
+            part.setImage2Loc(getImageUrl(part.getImage2Loc()));
+
+            // Include associated MachineModelDTOs
+            List<PartMachineModelDTO> machineModelDTOList = part.getMachineModels().stream()
+                    .map(this::convertToMachineModelDTO)
+                    .collect(Collectors.toList());
+
+            // Set the MachineModelDTOs within the Parts entity
+            part.setMachineModelsDTO(machineModelDTOList);
+        }
+        return partsList;
+    }
+
+    private PartMachineModelDTO convertToMachineModelDTO(MachineModel machineModel) {
+        PartMachineModelDTO dto = new PartMachineModelDTO();
+        dto.setModelId(machineModel.getModelId());
+        dto.setMachineModelNumber(machineModel.getMachineModelNumber());
+        dto.setPdfLocation(machineModel.getPdfLocation());
+        // Set other properties as needed
+
+        return dto;
     }
 
     // Helper method to get the full image URL

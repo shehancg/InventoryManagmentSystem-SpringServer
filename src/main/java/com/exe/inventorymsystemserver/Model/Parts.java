@@ -1,5 +1,6 @@
 package com.exe.inventorymsystemserver.Model;
 
+import com.exe.inventorymsystemserver.Dto.PartMachineModelDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -76,7 +77,7 @@ public class Parts {
     @Column(name = "color_code")
     private String colorCode;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JsonIgnore
     @JsonBackReference
     @JoinTable(
@@ -87,12 +88,15 @@ public class Parts {
     )
     private List<MachineModel> machineModels;
 
+    @Transient
+    private List<PartMachineModelDTO> machineModelsDTO;
+
     @OneToMany(mappedBy = "part",fetch = FetchType.EAGER)
     @JsonIgnore
     @JsonManagedReference
     private List<Transaction> transactions;
 
-    public Parts(Long partId, String partNumber, String partName, String description, int quantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions) {
+    public Parts(Long partId, String partNumber, String partName, String description, int quantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions, List<PartMachineModelDTO> machineModelsDTO) {
         this.partId = partId;
         this.partNumber = partNumber;
         this.partName = partName;
@@ -114,6 +118,7 @@ public class Parts {
         this.colorCode = colorCode;
         this.machineModels = machineModels;
         this.transactions = transactions;
+        this.machineModelsDTO = machineModelsDTO;
     }
 
     public Parts() {
