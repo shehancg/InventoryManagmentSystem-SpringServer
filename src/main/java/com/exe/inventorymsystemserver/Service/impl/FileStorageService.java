@@ -19,21 +19,10 @@ import java.util.UUID;
 @Service
 public class FileStorageService implements IFileStorageService {
 
-    private final String fileStorageLocation;
-
-    public FileStorageService(@Value("${spring.servlet.multipart.location:temp}") String fileStorageLocation) throws IOException {
-
-        this.fileStorageLocation = fileStorageLocation;
-        Path fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
-
-        Files.createDirectories(fileStoragePath);
-    }
-
 
     @Override
     public Resource downloadFile(String fileName) {
-
-        Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(fileName);
+        Path path = Paths.get("src/main/resources/static").resolve(fileName);
         Resource resource;
 
         try {
@@ -45,7 +34,7 @@ public class FileStorageService implements IFileStorageService {
         if (resource.exists() && resource.isReadable()) {
             return resource;
         } else {
-            throw new UnknownException("The file doesn't exist or not readable ⚠⚠⚠");
+            throw new UnknownException("The file doesn't exist or is not readable ⚠⚠⚠");
         }
     }
 
@@ -55,10 +44,10 @@ public class FileStorageService implements IFileStorageService {
             String fileName = generateFileName(file.getOriginalFilename());
 
             // Prepare the file path
-            Path targetLocation = Paths.get(fileStorageLocation).resolve(fileName);
+            Path targetLocation = Paths.get("src/main/resources/static").resolve(fileName);
 
             // Copy the file to the target location
-            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(file.getInputStream(), targetLocation);
 
             // Return the file path or location
             return fileName;
@@ -76,10 +65,14 @@ public class FileStorageService implements IFileStorageService {
 
     // New method to get the full URL for a file
     public String getFileUrl(String fileName) {
-        // Modify this method based on your file storage and URL generation strategy
         // Assuming you have a base URL for your image server
         String baseUrl = "http://localhost:8080/";
-        return baseUrl +  "fileStorage/" + fileName;
+
+        // Specify the relative path from the base URL to the directory where images are stored
+        String fileStoragePath = "/";
+
+        // Concatenate the base URL, relative path, and file name
+        return baseUrl + fileStoragePath + fileName;
     }
 
     // Method to store a file
