@@ -187,7 +187,7 @@ public class PartsService implements IPartsService {
         PartMachineModelDTO dto = new PartMachineModelDTO();
         dto.setModelId(machineModel.getModelId());
         dto.setMachineModelNumber(machineModel.getMachineModelNumber());
-        dto.setPdfLocation(machineModel.getPdfLocation());
+        dto.setPdfLocation(getPdfUrl(machineModel.getPdfLocation()));
         // Set other properties as needed
 
         return dto;
@@ -197,6 +197,12 @@ public class PartsService implements IPartsService {
     private String getImageUrl(String imageFileName) {
         // Assuming you have a method in FileStorageService to generate the full URL
         return fileStorageService.getFileUrl(imageFileName);
+    }
+
+    // Helper method to get the full pdf URL
+    private String getPdfUrl(String pdfFileName) {
+        // Assuming you have a method in FileStorageService to generate the full URL
+        return fileStorageService.getFileUrl(pdfFileName);
     }
 
     // Delete Part

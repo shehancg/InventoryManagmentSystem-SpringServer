@@ -61,6 +61,11 @@ public class MachineModelService implements IMachineModelService {
                 throw new InvalidMachineModelException("Machine Model Number Cannot Be Null");
             }
 
+            if (machineModel.getMachineType() == null){
+                // Throw exception if machineModelNumber is null
+                throw new InvalidMachineModelException("Machine Type Cannot Be Null");
+            }
+
             // Check for Duplicate Machine Model Number
             if (machineModelRepository.existsByMachineModelNumber(machineModel.getMachineModelNumber())) {
                 throw new DuplicateMachineModelException("Machine Model With Same Number Already Exists");
@@ -93,6 +98,11 @@ public class MachineModelService implements IMachineModelService {
                 if (machineModel.getMachineModelNumber() == null) {
                     // Throw exception if machineModelNumber is null
                     throw new InvalidMachineModelException("Machine Model Number Cannot Be Null");
+                }
+
+                if (machineModel.getMachineType() == null){
+                    // Throw exception if machineModelNumber is null
+                    throw new InvalidMachineModelException("Machine Type Cannot Be Null");
                 }
 
                 // Check for Duplicate Machine Model Number
@@ -139,7 +149,14 @@ public class MachineModelService implements IMachineModelService {
 
     // Method to get ALL Machine Models
     public List<MachineModel> getAllMachineModels() {
-        return machineModelRepository.findAll();
+
+        List<MachineModel> machineModelList = machineModelRepository.findAll();
+
+        for(MachineModel machineModel : machineModelList){
+            // Update Pdf URLs
+            machineModel.setPdfLocation(getPdfUrl(machineModel.getPdfLocation()));
+        }
+        return machineModelList;
     }
 
     // Method to get ALL Machine Models Names
@@ -173,11 +190,18 @@ public class MachineModelService implements IMachineModelService {
         Optional<MachineModel> machineModelOptional = machineModelRepository.findById(modelId);
 
         if (machineModelOptional.isPresent()){
+            machineModelOptional.ifPresent(machineModel -> {
+                machineModel.setPdfLocation(getPdfUrl(machineModel.getPdfLocation()));
+            });
             return machineModelOptional.get();
         }else {
             throw new InvalidMachineModelException("Machine Model with ID " + modelId + " not found.");
         }
     }
 
-
+    // Helper method to get the full pdf URL
+    private String getPdfUrl(String pdfFileName) {
+        // Assuming you have a method in FileStorageService to generate the full URL
+        return fileStorageService.getFileUrl(pdfFileName);
+    }
 }
