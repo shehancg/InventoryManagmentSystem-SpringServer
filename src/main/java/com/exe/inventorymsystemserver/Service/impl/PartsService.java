@@ -206,10 +206,32 @@ public class PartsService implements IPartsService {
         partsRepository.deletePart(partId);
     }
 
-    // Get Item By Id
-    @Override
+    // Get Item By Id OLD
+    /*@Override
     public Optional<Parts> getPartById(Long partId){
         return partsRepository.findByPartIdAndStatus(partId, true);
+    }*/
+
+    // Get Item By Id NEW
+    @Override
+    public Optional<Parts> getPartById(Long partId) {
+        Optional<Parts> optionalPart = partsRepository.findByPartIdAndStatus(partId, true);
+
+        optionalPart.ifPresent(part -> {
+            // Update image URLs
+            part.setImage1Loc(getImageUrl(part.getImage1Loc()));
+            part.setImage2Loc(getImageUrl(part.getImage2Loc()));
+
+            // Include associated MachineModelDTOs
+            List<PartMachineModelDTO> machineModelDTOList = part.getMachineModels().stream()
+                    .map(this::convertToMachineModelDTO)
+                    .collect(Collectors.toList());
+
+            // Set the MachineModelDTOs within the Parts entity
+            part.setMachineModelsDTO(machineModelDTOList);
+        });
+
+        return optionalPart;
     }
 
     // Get LOW quantity Parts
