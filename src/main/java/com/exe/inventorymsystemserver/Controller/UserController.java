@@ -79,4 +79,29 @@ public class UserController {
             return Response.invalidLogin(invalidPasswordException.getMessage());
         }
     }
+
+    // Check JWT Validity
+    @GetMapping("/check")
+    public Response checkTokenValidity(@RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            // Remove the "Bearer " prefix
+            String jwtToken = extractJwtToken(authorizationHeader);
+
+            if (jwtToken != null && userService.isTokenValid(jwtToken)) {
+                return Response.success("VALID");
+            } else {
+                return Response.fail("INVALID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.fail("INTERNAL_SERVER_ERROR");
+        }
+    }
+
+    private String extractJwtToken(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+        return null;
+    }
 }

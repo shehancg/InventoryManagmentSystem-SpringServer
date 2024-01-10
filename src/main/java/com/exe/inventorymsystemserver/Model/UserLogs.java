@@ -30,4 +30,15 @@ public class UserLogs {
 
     @Column(name = "jwtoken")
     private String jwToken;
+
+    public UserLogs(Long userLogsId, User user, LocalDateTime loginDateTime, boolean isActive, String jwToken) {
+        this.userLogsId = userLogsId;
+        this.user = user;
+        this.loginDateTime = loginDateTime;
+        this.isActive = isActive;
+        this.jwToken = jwToken;
+    }
+
+    public UserLogs() {
+    }
 }

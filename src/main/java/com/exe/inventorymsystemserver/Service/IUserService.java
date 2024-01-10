@@ -17,4 +17,6 @@ public interface IUserService {
 
     Map<String, Object> Login(User user)
         throws InvalidUserNameException, UserNotFoundException, InvalidPasswordException;
+
+    boolean isTokenValid(String jwtToken);
 }

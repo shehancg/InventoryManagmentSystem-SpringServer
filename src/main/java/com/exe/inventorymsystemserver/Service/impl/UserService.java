@@ -186,5 +186,32 @@ public class UserService implements IUserService {
         return result;
     }
 
+    // Method to check validity of jwtoken
+    public boolean isTokenValid(String jwtToken) {
+        try {
+            String username = jwtUtil.extractUsername(jwtToken);
 
+            Long userId = getUserIdByUsername(username);
+
+            Optional<UserLogs> userLogsOptional = iUserLogsRepository.findByUser_UserId(userId);
+
+            return userLogsOptional.map(userLogs -> userLogs.getJwToken().equals(jwtToken)).orElse(false);
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Long getUserIdByUsername(String username) {
+        // Query your database or user management system to get the user ID based on the username
+        User user = userRepository.findByUserName(username);
+
+        if (user != null) {
+            return user.getUserId();
+        } else {
+            // Handle the case where the user with the given username is not found
+            return null;
+        }
+    }
 }
