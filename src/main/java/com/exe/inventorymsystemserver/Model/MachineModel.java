@@ -51,6 +51,7 @@ public class MachineModel {
     private boolean status;
 
     @ManyToMany(mappedBy = "machineModels", fetch = FetchType.EAGER)
+    @JsonIgnore
     @JsonManagedReference
     private List<Parts> parts;
 
