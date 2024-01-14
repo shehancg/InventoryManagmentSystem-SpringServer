@@ -188,6 +188,8 @@ public class PartsService implements IPartsService {
         dto.setModelId(machineModel.getModelId());
         dto.setMachineModelNumber(machineModel.getMachineModelNumber());
         dto.setPdfLocation(getPdfUrl(machineModel.getPdfLocation()));
+        dto.setMachineTypeId(machineModel.getMachineTypeId());
+        dto.setMachineTypeName(machineModel.getMachineTypeName());
         // Set other properties as needed
 
         return dto;

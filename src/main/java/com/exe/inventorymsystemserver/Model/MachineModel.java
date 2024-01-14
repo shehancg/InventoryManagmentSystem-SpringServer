@@ -31,6 +31,12 @@ public class MachineModel {
     @JoinColumn(name = "machine_type_id")
     private MachineType machineType;
 
+    @Column(name = "machine_type_id_rel")
+    private Long machineTypeId;
+
+    @Column(name = "machine_type_name")
+    private String machineTypeName;
+
     @Transient
     @JsonIgnore
     private MultipartFile pdfFile; // Transient field to handle file upload
@@ -55,17 +61,20 @@ public class MachineModel {
     @JsonManagedReference
     private List<Parts> parts;
 
-    public MachineModel(Long modelId, String machineModelNumber, String pdfLocation, MachineType machineType, MultipartFile pdfFile, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, Boolean status) {
+    public MachineModel(Long modelId, String machineModelNumber, String pdfLocation, MachineType machineType, Long machineTypeId, String machineTypeName, MultipartFile pdfFile, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, List<Parts> parts) {
         this.modelId = modelId;
         this.machineModelNumber = machineModelNumber;
         this.pdfLocation = pdfLocation;
         this.machineType = machineType;
+        this.machineTypeId = machineTypeId;
+        this.machineTypeName = machineTypeName;
         this.pdfFile = pdfFile;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.modifyBy = modifyBy;
         this.modifyDate = modifyDate;
         this.status = status;
+        this.parts = parts;
     }
 
     public MachineModel() {

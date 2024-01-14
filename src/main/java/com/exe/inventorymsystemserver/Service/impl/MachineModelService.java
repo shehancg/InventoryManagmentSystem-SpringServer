@@ -80,6 +80,10 @@ public class MachineModelService implements IMachineModelService {
             machineModel.setMachineType(machineType);
             machineModel.setStatus(true);
 
+            // New Fields
+            machineModel.setMachineTypeId(machineType.getMachineTypeId());
+            machineModel.setMachineTypeName(machineType.getMachineTypeName());
+
             // Handle Pdf upload
             if (pdfFile != null && !pdfFile.isEmpty()){
                 // Save or Process the pdf file and update the pdf location in machinemodel entity

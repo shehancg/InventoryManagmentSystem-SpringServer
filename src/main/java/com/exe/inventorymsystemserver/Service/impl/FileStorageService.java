@@ -22,7 +22,7 @@ public class FileStorageService implements IFileStorageService {
 
     @Override
     public Resource downloadFile(String fileName) {
-        Path path = Paths.get("src/main/resources/static").resolve(fileName);
+        Path path = Paths.get("C:/Users/Geethan/OneDrive/Documents/exelkInventory/pdf/").resolve(fileName);
         Resource resource;
 
         try {
@@ -40,11 +40,13 @@ public class FileStorageService implements IFileStorageService {
 
     public String storeFile(MultipartFile file) {
         try {
+            String username = System.getProperty("user.name");
+            System.out.println(username);
             // Generate a unique file name
             String fileName = generateFileName(file.getOriginalFilename());
 
             // Prepare the file path
-            Path targetLocation = Paths.get("src/main/resources/static").resolve(fileName);
+            Path targetLocation = Paths.get("C:/Users/Geethan/OneDrive/Documents/exelkInventory/pdf/").resolve(fileName);
 
             // Copy the file to the target location
             Files.copy(file.getInputStream(), targetLocation);
@@ -69,10 +71,10 @@ public class FileStorageService implements IFileStorageService {
         String baseUrl = "http://localhost:8080/";
 
         // Specify the relative path from the base URL to the directory where images are stored
-        String fileStoragePath = "/";
+        String fileStoragePath = "C:/Users/Geethan/OneDrive/Documents/exelkInventory/pdf/";
 
         // Concatenate the base URL, relative path, and file name
-        return baseUrl + fileStoragePath + fileName;
+        return fileStoragePath + fileName;
     }
 
     // Method to store a file
