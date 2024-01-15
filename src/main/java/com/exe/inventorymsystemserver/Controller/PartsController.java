@@ -1,6 +1,7 @@
 package com.exe.inventorymsystemserver.Controller;
 
 import com.exe.inventorymsystemserver.Exception.DuplicatePartNumberException;
+import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidPartException;
 import com.exe.inventorymsystemserver.Model.Parts;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
@@ -58,6 +59,8 @@ public class PartsController {
             return Response.fail(invalidPartException.getMessage());
         } catch (DuplicatePartNumberException duplicatePartNumberException) {
             return Response.fail(duplicatePartNumberException.getMessage());
+        } catch (InvalidLocationException invalidLocationException) {
+            return Response.fail(invalidLocationException.getMessage());
         }
     }
 
@@ -77,6 +80,8 @@ public class PartsController {
             return Response.fail(invalidPartException.getMessage());
         } catch (DuplicatePartNumberException duplicatePartNumberException) {
             return Response.fail(duplicatePartNumberException.getMessage());
+        } catch (InvalidLocationException invalidLocationException) {
+            return Response.fail(invalidLocationException.getMessage());
         }
     }
 

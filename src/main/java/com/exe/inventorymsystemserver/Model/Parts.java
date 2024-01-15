@@ -48,6 +48,15 @@ public class Parts {
     @Column(name = "l3")
     private String location3;
 
+    @Column(name = "l1_name")
+    private String location1Name;
+
+    @Column(name = "l2_name")
+    private String location2Name;
+
+    @Column(name = "l3_name")
+    private String location3Name;
+
     @Column(name = "created_by")
     private String createdBy;
 
@@ -99,7 +108,7 @@ public class Parts {
     @JsonManagedReference
     private List<Transaction> transactions;
 
-    public Parts(Long partId, String partNumber, String partName, String description, int quantity, int limitQuantity, double price, String location1, String location2, String location3, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<Transaction> transactions, List<PartMachineModelDTO> machineModelsDTO) {
+    public Parts(Long partId, String partNumber, String partName, String description, int quantity, int limitQuantity, double price, String location1, String location2, String location3, String location1Name, String location2Name, String location3Name, String createdBy, LocalDateTime createdDate, String modifyBy, LocalDateTime modifyDate, boolean status, String image1Loc, MultipartFile imageFile1, String image2Loc, MultipartFile imageFile2, String colorCode, List<MachineModel> machineModels, List<PartMachineModelDTO> machineModelsDTO, List<Transaction> transactions) {
         this.partId = partId;
         this.partNumber = partNumber;
         this.partName = partName;
@@ -110,6 +119,9 @@ public class Parts {
         this.location1 = location1;
         this.location2 = location2;
         this.location3 = location3;
+        this.location1Name = location1Name;
+        this.location2Name = location2Name;
+        this.location3Name = location3Name;
         this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.modifyBy = modifyBy;
@@ -121,8 +133,8 @@ public class Parts {
         this.imageFile2 = imageFile2;
         this.colorCode = colorCode;
         this.machineModels = machineModels;
-        this.transactions = transactions;
         this.machineModelsDTO = machineModelsDTO;
+        this.transactions = transactions;
     }
 
     public Parts() {

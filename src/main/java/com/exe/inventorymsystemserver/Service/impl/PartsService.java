@@ -2,9 +2,12 @@ package com.exe.inventorymsystemserver.Service.impl;
 
 import com.exe.inventorymsystemserver.Dto.PartMachineModelDTO;
 import com.exe.inventorymsystemserver.Exception.DuplicatePartNumberException;
+import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidPartException;
+import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.Model.MachineModel;
 import com.exe.inventorymsystemserver.Model.Parts;
+import com.exe.inventorymsystemserver.Repository.ILocationRepository;
 import com.exe.inventorymsystemserver.Repository.IMachineModelRepository;
 import com.exe.inventorymsystemserver.Repository.IPartsRepository;
 import com.exe.inventorymsystemserver.Service.IPartsService;
@@ -28,6 +31,7 @@ public class PartsService implements IPartsService {
 
     private final IPartsRepository partsRepository;
     private final IMachineModelRepository machineModelRepository;
+    private final ILocationRepository locationRepository;
     private final JwtUtil jwtUtil;
     private final Path fileStoragePath;
     private final FileStorageService fileStorageService;
@@ -35,11 +39,13 @@ public class PartsService implements IPartsService {
     @Autowired
     public PartsService(@Value("${spring.servlet.multipart.location:temp}") String fileStorageLocation,
                         IPartsRepository partsRepository, IMachineModelRepository machineModelRepository,
+                        ILocationRepository locationRepository,
                         FileStorageService fileStorageService,
                         JwtUtil jwtUtil) throws Exception {
 
         this.partsRepository = partsRepository;
         this.machineModelRepository = machineModelRepository;
+        this.locationRepository = locationRepository;
         this.jwtUtil = jwtUtil;
         this.fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
         this.fileStorageService =  fileStorageService;
@@ -79,6 +85,15 @@ public class PartsService implements IPartsService {
             parts.setCreatedBy(username);
             parts.setCreatedDate(LocalDateTime.now());
             parts.setStatus(true);
+
+            // Set Location Names
+            Location location1 = getLocationById(Long.valueOf(parts.getLocation1()));
+            Location location2 = getLocationById(Long.valueOf(parts.getLocation2()));
+            Location location3 = getLocationById(Long.valueOf(parts.getLocation3()));
+
+            parts.setLocation1Name(location1.getLocationName());
+            parts.setLocation2Name(location2.getLocationName());
+            parts.setLocation3Name(location3.getLocationName());
 
             // Handle image uploads
             if (imageFile1 != null && !imageFile1.isEmpty()) {
@@ -256,6 +271,12 @@ public class PartsService implements IPartsService {
         return parts.stream()
                 .filter(part -> part.getQuantity() < part.getLimitQuantity())
                 .collect(Collectors.toList());
+    }
+
+    // Helper Method to get Location by Id
+    private Location getLocationById(Long locationId){
+        return locationRepository.findById(locationId)
+                .orElseThrow(() -> new InvalidLocationException("Invalid Location"));
     }
 
 }
