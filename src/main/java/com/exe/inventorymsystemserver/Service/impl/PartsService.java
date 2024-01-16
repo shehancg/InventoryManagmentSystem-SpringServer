@@ -143,6 +143,19 @@ public class PartsService implements IPartsService {
                 updatePart.setModifyDate(LocalDateTime.now());
                 // Update other fields as needed
 
+                updatePart.setLocation1(parts.getLocation1());
+                updatePart.setLocation2(parts.getLocation2());
+                updatePart.setLocation3(parts.getLocation3());
+
+                // Set Location Names
+                Location location1 = getLocationById(Long.valueOf(parts.getLocation1()));
+                Location location2 = getLocationById(Long.valueOf(parts.getLocation2()));
+                Location location3 = getLocationById(Long.valueOf(parts.getLocation3()));
+
+                updatePart.setLocation1Name(location1.getLocationName());
+                updatePart.setLocation2Name(location2.getLocationName());
+                updatePart.setLocation3Name(location3.getLocationName());
+
                 // Handle image uploads for updates
                 if (imageFile1 != null && !imageFile1.isEmpty()) {
                     // Save or process the image and update the image location in the Parts entity
