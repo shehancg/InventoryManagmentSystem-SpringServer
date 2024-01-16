@@ -73,7 +73,18 @@ public class PartsService implements IPartsService {
                 throw new InvalidPartException("Part Price Cannot Be Null");
             }
 
-            if (partsRepository.existsByPartNumber(parts.getPartNumber())){
+            /*if (partsRepository.existsByPartNumber(parts.getPartNumber())){
+                throw new DuplicatePartNumberException("Part Number with Same Number Already Exists");
+            }*/
+
+            // Check if a part with the same part number exists and has state 0
+            Parts existingPart = partsRepository.findByPartNumberAndStatus(parts.getPartNumber(), false);
+            if (existingPart != null) {
+                // Treat it as an update
+                parts.setPartId(existingPart.getPartId());
+                parts.setStatus(true); // Set state to 1 (active)
+            } else if (partsRepository.existsByPartNumber(parts.getPartNumber())) {
+                // Part with the same part number already exists and is active
                 throw new DuplicatePartNumberException("Part Number with Same Number Already Exists");
             }
 
