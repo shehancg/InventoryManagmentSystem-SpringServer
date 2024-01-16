@@ -5,7 +5,9 @@ import com.exe.inventorymsystemserver.Exception.DuplicateLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationTypeException;
 import com.exe.inventorymsystemserver.Model.Location;
+import com.exe.inventorymsystemserver.Model.Parts;
 import com.exe.inventorymsystemserver.Repository.ILocationRepository;
+import com.exe.inventorymsystemserver.Repository.IPartsRepository;
 import com.exe.inventorymsystemserver.Service.ILocationService;
 import com.exe.inventorymsystemserver.Utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +25,15 @@ public class LocationService implements ILocationService {
 
     private final ILocationRepository locationRepository;
 
+    private final IPartsRepository partsRepository;
+
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public LocationService(ILocationRepository locationRepository, JwtUtil jwtUtil){
+    public LocationService(ILocationRepository locationRepository, IPartsRepository partsRepository, JwtUtil jwtUtil){
 
         this.locationRepository = locationRepository;
+        this.partsRepository = partsRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -87,6 +92,9 @@ public class LocationService implements ILocationService {
                 // Save the Updated Location Back to the Database
                 locationRepository.save(updateLocation);
 
+                // Update locationName in associated Parts entities
+                updatePartsLocationName(existingLocation.get(), location.getLocationName());
+
                 return updateLocation;
             } else {
                 throw new InvalidLocationException("Location ID " + location.getLocationId() + " not found.");
@@ -128,4 +136,27 @@ public class LocationService implements ILocationService {
                 .map(location -> new LocationDTO(location.getLocationId(), location.getLocationName()))
                 .collect(Collectors.toList());
     }
+
+    private void updatePartsLocationName(Location location, String newLocationName) {
+        List<Parts> partsList = partsRepository.findByLocation1OrLocation2OrLocation3(
+        String.valueOf(location.getLocationId()),
+                String.valueOf(location.getLocationId()),
+                String.valueOf(location.getLocationId()));
+
+        for (Parts parts : partsList) {
+            // Identify the column in which the location ID is found and update the corresponding name
+            if (String.valueOf(location.getLocationId()).equals(parts.getLocation1())) {
+                parts.setLocation1Name(newLocationName);
+            }
+            if (String.valueOf(location.getLocationId()).equals(parts.getLocation2())) {
+                parts.setLocation2Name(newLocationName);
+            }
+            if (String.valueOf(location.getLocationId()).equals(parts.getLocation3())) {
+                parts.setLocation3Name(newLocationName);
+            }
+
+            partsRepository.save(parts);
+        }
+    }
+
 }

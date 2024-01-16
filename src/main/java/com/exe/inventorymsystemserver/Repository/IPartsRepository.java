@@ -28,4 +28,6 @@ public interface IPartsRepository extends JpaRepository<Parts, Long> {
     Optional<Parts> findByPartIdAndStatus(Long partId, boolean status);
 
     Parts findByPartNumberAndStatus(String partNumber, boolean status);
+
+    List<Parts> findByLocation1OrLocation2OrLocation3(String locationId, String locationId2, String locationId3);
 }
