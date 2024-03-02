@@ -30,4 +30,6 @@ public interface IPartsRepository extends JpaRepository<Parts, Long> {
     Parts findByPartNumberAndStatus(String partNumber, boolean status);
 
     List<Parts> findByLocation1OrLocation2OrLocation3(String locationId, String locationId2, String locationId3);
+
+    boolean existsByLocation1OrLocation2OrLocation3(String locationId, String locationId2, String locationId3);
 }

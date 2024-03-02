@@ -4,6 +4,7 @@ import com.exe.inventorymsystemserver.Dto.LocationDTO;
 import com.exe.inventorymsystemserver.Exception.DuplicateLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationTypeException;
+import com.exe.inventorymsystemserver.Exception.ItemAttachToLocationException;
 import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.Model.Parts;
 import com.exe.inventorymsystemserver.Repository.ILocationRepository;
@@ -157,6 +158,24 @@ public class LocationService implements ILocationService {
 
             partsRepository.save(parts);
         }
+    }
+
+    // Delete Location
+    public Location deleteLocation(Long locationId) {
+
+        String LocationIdStringValue = String.valueOf(locationId);
+
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(()->new InvalidLocationException("Location not found with ID: " + locationId));
+
+        // Check if the location ID exists in any of the parts columns
+        if (partsRepository.existsByLocation1OrLocation2OrLocation3(LocationIdStringValue, LocationIdStringValue, LocationIdStringValue)) {
+            throw new ItemAttachToLocationException("Cannot delete location. It is associated with one or more parts.");
+        }
+
+        // If not in use, proceed with the deletion
+        locationRepository.deleteById(locationId);
+        return location;
     }
 
 }

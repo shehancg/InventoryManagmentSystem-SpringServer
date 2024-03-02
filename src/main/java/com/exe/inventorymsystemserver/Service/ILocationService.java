@@ -12,4 +12,6 @@ public interface ILocationService {
     Location createOrUpdateLocationModel(Location location, String jwtToken);
 
     Map<String, List<LocationDTO>> getLocationListsByTypes();
+
+    Location deleteLocation(Long locationId);
 }

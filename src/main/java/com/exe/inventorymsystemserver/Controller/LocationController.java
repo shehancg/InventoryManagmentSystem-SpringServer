@@ -3,6 +3,7 @@ package com.exe.inventorymsystemserver.Controller;
 import com.exe.inventorymsystemserver.Dto.LocationDTO;
 import com.exe.inventorymsystemserver.Exception.DuplicateLocationException;
 import com.exe.inventorymsystemserver.Exception.InvalidLocationException;
+import com.exe.inventorymsystemserver.Exception.ItemAttachToLocationException;
 import com.exe.inventorymsystemserver.Model.Location;
 import com.exe.inventorymsystemserver.ResponseHandler.Response;
 import com.exe.inventorymsystemserver.Service.ILocationService;
@@ -61,6 +62,18 @@ public class LocationController {
         } catch (Exception e) {
             // Handle exceptions appropriately, you can customize this based on your needs
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/{locationId}")
+    public Response deleteLocation(@PathVariable Long locationId){
+        try {
+            Location location = locationService.deleteLocation(locationId);
+            return Response.success(location);
+        } catch (InvalidLocationException invalidLocationException){
+            return Response.fail(invalidLocationException.getMessage());
+        } catch (ItemAttachToLocationException itemAttachToLocationException){
+            return Response.fail(itemAttachToLocationException.getMessage());
         }
     }
 }
