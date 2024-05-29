@@ -154,6 +154,8 @@ public class PartsService implements IPartsService {
                 updatePart.setModifyDate(LocalDateTime.now());
                 // Update other fields as needed
 
+                updatePart.setPartNumber(parts.getPartNumber());
+
                 updatePart.setLocation1(parts.getLocation1());
                 updatePart.setLocation2(parts.getLocation2());
                 updatePart.setLocation3(parts.getLocation3());
@@ -166,6 +168,10 @@ public class PartsService implements IPartsService {
                 updatePart.setLocation1Name(location1.getLocationName());
                 updatePart.setLocation2Name(location2.getLocationName());
                 updatePart.setLocation3Name(location3.getLocationName());
+
+                // Machine Model ID Update
+                List<MachineModel> machineModels = machineModelRepository.findAllById(machineModelIds);
+                updatePart.setMachineModels(machineModels);
 
                 // Handle image uploads for updates
                 if (imageFile1 != null && !imageFile1.isEmpty()) {
