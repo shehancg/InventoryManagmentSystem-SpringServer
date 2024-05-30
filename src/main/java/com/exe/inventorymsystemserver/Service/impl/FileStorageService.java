@@ -71,7 +71,7 @@ public class FileStorageService implements IFileStorageService {
         String baseUrl = "http://localhost:8080/";
 
         // Specify the relative path from the base URL to the directory where images are stored
-        String fileStoragePath = "C:/Users/Geethan/OneDrive/Documents/exelkInventory/pdf/";
+        String fileStoragePath = "/pdf/";
 
         // Concatenate the base URL, relative path, and file name
         return fileStoragePath + fileName;
@@ -83,4 +83,6 @@ public class FileStorageService implements IFileStorageService {
         Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
         return targetLocation;
     }*/
+
+    //D:/InventorySystem/InventoryClient/public/pdf/
 }

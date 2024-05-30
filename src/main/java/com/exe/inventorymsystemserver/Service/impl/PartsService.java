@@ -152,6 +152,7 @@ public class PartsService implements IPartsService {
                 updatePart.setColorCode(parts.getColorCode());
                 updatePart.setModifyBy(username);
                 updatePart.setModifyDate(LocalDateTime.now());
+                updatePart.setLimitQuantity(parts.getLimitQuantity());
                 // Update other fields as needed
 
                 updatePart.setPartNumber(parts.getPartNumber());
