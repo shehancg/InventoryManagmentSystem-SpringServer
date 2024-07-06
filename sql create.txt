@@ -1,0 +1,24 @@
+CREATE TABLE machine_model_part (
+    part_id BIGINT NOT NULL,
+    model_id BIGINT NOT NULL,
+    PRIMARY KEY (part_id, model_id),
+    FOREIGN KEY (part_id) REFERENCES parts (part_id),
+    FOREIGN KEY (model_id) REFERENCES machine_model (model_id)
+);
+
+{
+    "transactionType": "StockIn",
+    "part": {
+        "partId": "10"
+    },
+    "quantity": "20"
+}
+
+
+    @Query("SELECT mm FROM MachineModel mm JOIN FETCH mm.machineType")
+    List<MachineModel> findAllWithMachineType();
+    
+    
+aiML1234%%
+
+shehan1234
