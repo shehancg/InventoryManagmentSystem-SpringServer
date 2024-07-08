@@ -78,13 +78,9 @@ public class LocationService implements ILocationService {
                     throw new InvalidLocationException("Location Cannot Be Null");
                 }
 
-                // Check if Duplicate Location Exists
-                if (locationRepository.existsByLocationName(location.getLocationName())) {
-                    throw new DuplicateLocationException("Same Location Name Already Exists");
-                }
-
                 // Update only the necessary Fields
                 Location updateLocation = existingLocation.get();
+                updateLocation.setLocationType(location.getLocationType());
                 updateLocation.setModifyBy(username);
                 updateLocation.setModifyDate(LocalDateTime.now());
                 updateLocation.setLocationName(location.getLocationName());
